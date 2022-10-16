@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -138,9 +138,49 @@ app
  * Add file read/writes
  */
 
-ipcMain.handle('update-settings', (event, settings: string) => {
-  fs.writeFileSync(
-    path.join(app.getPath('userData'), 'settings.json'),
-    settings
+app.on('ready', () => {
+  // create tasks.json if it doesn't exist
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    JSON.stringify({}),
+    { flag: 'wx' }
   );
+
+  // create tasks.json if it doesn't exist
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'wallets.json'),
+    JSON.stringify([]),
+    { flag: 'wx' }
+  );
+
+  // create tasks.json if it doesn't exist
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'settings.json'),
+    JSON.stringify({ rpc: '', etherscan: '', webhook: '' }),
+    { flag: 'wx' }
+  );
+});
+
+// update tasks
+
+// fetch tasks
+
+// update wallets
+
+// fetch wallets
+
+// update settings
+ipcMain.handle('update-settings', (event, settings: string) => {
+  // update settings.json with user input settings
+  fs.writeFile(path.join(app.getPath('userData'), 'settings.json'), settings);
+});
+
+// fetch settings
+ipcMain.handle('fetch-settings', async () => {
+  // read settings.json
+  const settings = await fs.readFile(
+    path.join(app.getPath('userData'), 'settings.json'),
+    'utf-8'
+  );
+  return settings;
 });

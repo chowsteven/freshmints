@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { ISettings } from 'interfaces/ISettings';
+import { useEffect, useRef, useState } from 'react';
 
 export const Settings = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -7,10 +8,29 @@ export const Settings = () => {
   const [etherscanKey, setEtherscanKey] = useState('');
   const [discordWebhook, setDiscordWebhook] = useState('');
 
+  // on component mount, fetch settings
+  useEffect(() => {
+    let settings: string;
+
+    // async function, so make separate function
+    const fetchSettings = async () => {
+      settings = await window.api.fetchSettings();
+      const settingsJSON: ISettings = JSON.parse(settings);
+
+      // set states
+      setGlobalRpc(settingsJSON.rpc);
+      setEtherscanKey(settingsJSON.etherscan);
+      setDiscordWebhook(settingsJSON.webhook);
+    };
+
+    fetchSettings();
+  }, []);
+
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
     if (formRef.current) {
+      // get form data and save to settings.json
       const data = new FormData(formRef.current);
       const settings = JSON.stringify(Object.fromEntries(data.entries()));
       window.api.updateSettings(settings);
