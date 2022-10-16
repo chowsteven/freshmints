@@ -6,7 +6,7 @@ export const Sidebar = () => {
   return (
     <div className="flex flex-col items-center gap-6 w-48 h-screen pt-16 bg-gray-900 text-white">
       <NavLink
-        to="/tasks"
+        to="/"
         className={({ isActive }) =>
           isActive
             ? 'flex items-center gap-2 w-36 px-4 py-1.5 text-center text-green-500 bg-gray-700 rounded-md'
