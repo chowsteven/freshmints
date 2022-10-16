@@ -9,6 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
+import fs from 'fs';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
@@ -132,3 +133,14 @@ app
     });
   })
   .catch(console.log);
+
+/**
+ * Add file read/writes
+ */
+
+ipcMain.handle('update-settings', (event, settings: string) => {
+  fs.writeFileSync(
+    path.join(app.getPath('userData'), 'settings.json'),
+    settings
+  );
+});

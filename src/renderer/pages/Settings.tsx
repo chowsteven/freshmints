@@ -9,6 +9,12 @@ export const Settings = () => {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+
+    if (formRef.current) {
+      const data = new FormData(formRef.current);
+      const settings = JSON.stringify(Object.fromEntries(data.entries()));
+      window.api.updateSettings(settings);
+    }
   };
 
   return (
