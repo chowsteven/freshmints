@@ -7,6 +7,7 @@ export const Settings = () => {
   const [globalRpc, setGlobalRpc] = useState('');
   const [etherscanKey, setEtherscanKey] = useState('');
   const [discordWebhook, setDiscordWebhook] = useState('');
+  const [buttonText, setButtonText] = useState('Save');
 
   // on component mount, fetch settings
   useEffect(() => {
@@ -34,6 +35,7 @@ export const Settings = () => {
       const data = new FormData(formRef.current);
       const settings = JSON.stringify(Object.fromEntries(data.entries()));
       window.api.updateSettings(settings);
+      setButtonText('Saved!');
     }
   };
 
@@ -50,7 +52,10 @@ export const Settings = () => {
               id="rpc"
               placeholder="RPC Link"
               value={globalRpc}
-              onChange={(e) => setGlobalRpc(e.target.value)}
+              onChange={(e) => {
+                setGlobalRpc(e.target.value);
+                setButtonText('Save');
+              }}
               className="w-[512px] h-8 p-2 mr-2 rounded-md bg-gray-600 hover:bg-gray-500 focus:bg-gray-500"
             />
           </label>
@@ -64,7 +69,10 @@ export const Settings = () => {
               id="etherscan"
               placeholder="API Key"
               value={etherscanKey}
-              onChange={(e) => setEtherscanKey(e.target.value)}
+              onChange={(e) => {
+                setEtherscanKey(e.target.value);
+                setButtonText('Save');
+              }}
               className="w-[512px] h-8 p-2 mr-2 rounded-md bg-gray-600 hover:bg-gray-500 focus:bg-gray-500"
             />
           </label>
@@ -78,7 +86,10 @@ export const Settings = () => {
               id="webhook"
               placeholder="Discord Webhook URL"
               value={discordWebhook}
-              onChange={(e) => setDiscordWebhook(e.target.value)}
+              onChange={(e) => {
+                setDiscordWebhook(e.target.value);
+                setButtonText('Save');
+              }}
               className="w-[512px] h-8 p-2 mr-2 rounded-md bg-gray-600 hover:bg-gray-500 focus:bg-gray-500"
             />
           </label>
@@ -88,7 +99,7 @@ export const Settings = () => {
           onClick={handleSubmit}
           className="border rounded-md px-4 py-1.5 hover:bg-gray-600"
         >
-          Save
+          {buttonText}
         </button>
       </form>
     </div>
