@@ -1,14 +1,16 @@
 import { useState } from 'react';
 import { Wallet } from 'renderer/components/Wallet';
+import { AddWalletModal } from 'renderer/components/AddWalletModal';
 
 export const Wallets = () => {
   const [wallets, setWallets] = useState([
     { name: 'test1', address: 'test2' },
     { name: 'test3', address: 'test4' },
   ]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleAdd = () => {
-    // add modal
+    setIsModalOpen(true);
     // add wallet
   };
 
@@ -38,6 +40,10 @@ export const Wallets = () => {
           ))}
         </tbody>
       </table>
+      <AddWalletModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
     </div>
   );
 };
