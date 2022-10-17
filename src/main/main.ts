@@ -165,9 +165,44 @@ app.on('ready', () => {
 
 // fetch tasks
 
-// update wallets
+// add wallet
+ipcMain.handle(
+  'add-wallet',
+  async (
+    event,
+    wallet: {
+      [k: string]: FormDataEntryValue;
+    }
+  ) => {
+    // get current wallets
+    const currentWalletsStr = await fs.readFile(
+      path.join(app.getPath('userData'), 'wallets.json'),
+      'utf-8'
+    );
+    const currentWallets = JSON.parse(currentWalletsStr);
+
+    // push to wallet array
+    currentWallets.push(wallet);
+    fs.writeFile(
+      path.join(app.getPath('userData'), 'wallets.json'),
+      JSON.stringify(currentWallets)
+    );
+  }
+);
+
+// update wallet
+
+// delete wallet
 
 // fetch wallets
+ipcMain.handle('fetch-wallets', async () => {
+  // read wallets.json
+  const wallets = await fs.readFile(
+    path.join(app.getPath('userData'), 'wallets.json'),
+    'utf-8'
+  );
+  return wallets;
+});
 
 // update settings
 ipcMain.handle('update-settings', (event, settings: string) => {

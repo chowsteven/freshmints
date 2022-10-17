@@ -1,18 +1,25 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Wallet } from 'renderer/components/Wallet';
 import { AddWalletModal } from 'renderer/components/AddWalletModal';
+import { IWallet } from 'interfaces/IWallet';
 
 export const Wallets = () => {
-  const [wallets, setWallets] = useState([
-    { name: 'test1', address: 'test2' },
-    { name: 'test3', address: 'test4' },
-  ]);
+  const [wallets, setWallets] = useState<IWallet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleAdd = () => {
-    setIsModalOpen(true);
-    // add wallet
-  };
+  // wrap around useCallback: https://devtrium.com/posts/async-functions-useeffect
+  const fetchWallets = useCallback(async () => {
+    const walletsArrStr: string = await window.api.fetchWallets();
+    const walletsArr: IWallet[] = JSON.parse(walletsArrStr);
+
+    setWallets(walletsArr);
+    return walletsArr;
+  }, []);
+
+  // fetch wallets on component mount
+  useEffect(() => {
+    fetchWallets();
+  }, [fetchWallets]);
 
   return (
     <div>
@@ -20,7 +27,7 @@ export const Wallets = () => {
         <div className="text-2xl mb-8">Wallets</div>
         <button
           type="button"
-          onClick={handleAdd}
+          onClick={() => setIsModalOpen(true)}
           className="px-4 py-2 mr-16 mb-4 border rounded-md hover:bg-gray-600"
         >
           Add Wallet
@@ -36,13 +43,15 @@ export const Wallets = () => {
         </thead>
         <tbody>
           {wallets.map((wallet) => (
-            <Wallet key={wallet.address} wallet={wallet} />
+            <Wallet key={wallet.privateKey} wallet={wallet} />
           ))}
         </tbody>
       </table>
       <AddWalletModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        setWallets={setWallets}
+        fetchWallets={fetchWallets}
       />
     </div>
   );
