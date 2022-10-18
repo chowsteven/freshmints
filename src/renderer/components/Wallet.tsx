@@ -1,10 +1,8 @@
+import { IWallet } from 'interfaces/IWallet';
 import { MdModeEdit, MdDelete } from 'react-icons/md';
 
 interface WalletProps {
-  wallet: {
-    name: string;
-    privateKey: string;
-  };
+  wallet: IWallet;
 }
 
 export const Wallet = ({ wallet }: WalletProps) => {
