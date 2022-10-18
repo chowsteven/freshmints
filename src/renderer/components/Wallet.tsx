@@ -1,16 +1,11 @@
 import { IWallet } from 'interfaces/IWallet';
-import { MdModeEdit, MdDelete } from 'react-icons/md';
+import { MdDelete } from 'react-icons/md';
 
 interface WalletProps {
   wallet: IWallet;
 }
 
 export const Wallet = ({ wallet }: WalletProps) => {
-  const handleEdit = () => {
-    // edit modal
-    // update wallet
-  };
-
   const handleDelete = () => {
     // confirm delete
     // remove wallet
@@ -22,7 +17,6 @@ export const Wallet = ({ wallet }: WalletProps) => {
       <td className="py-2">{wallet.address}</td>
       <td>
         <div className="flex gap-2">
-          <MdModeEdit className="hover:cursor-pointer" />
           <MdDelete className="hover:cursor-pointer" />
         </div>
       </td>
