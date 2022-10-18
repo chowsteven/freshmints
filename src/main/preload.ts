@@ -5,6 +5,10 @@ const addWallet = async (wallet: { [k: string]: FormDataEntryValue }) => {
   return newWallet;
 };
 
+const deleteWallet = (wallet: { [k: string]: FormDataEntryValue }) => {
+  ipcRenderer.invoke('delete-wallet', wallet);
+};
+
 const fetchWallets = async () => {
   const wallets = await ipcRenderer.invoke('fetch-wallets');
   return wallets;
@@ -21,6 +25,7 @@ const fetchSettings = async () => {
 
 const API = {
   addWallet,
+  deleteWallet,
   fetchWallets,
   updateSettings,
   fetchSettings,

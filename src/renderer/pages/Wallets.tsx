@@ -6,6 +6,7 @@ import { IWallet } from 'interfaces/IWallet';
 export const Wallets = () => {
   const [wallets, setWallets] = useState<IWallet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDeleteWallet, setIsDeleteWallet] = useState(false);
 
   // wrap around useCallback: https://devtrium.com/posts/async-functions-useeffect
   const fetchWallets = useCallback(async () => {
@@ -19,7 +20,7 @@ export const Wallets = () => {
   // fetch wallets on component mount
   useEffect(() => {
     fetchWallets();
-  }, [fetchWallets]);
+  }, [fetchWallets, isDeleteWallet]);
 
   return (
     <div>
@@ -43,7 +44,12 @@ export const Wallets = () => {
         </thead>
         <tbody>
           {wallets.map((wallet) => (
-            <Wallet key={wallet.address} wallet={wallet} />
+            <Wallet
+              key={wallet.address}
+              wallet={wallet}
+              isDeleteWallet={isDeleteWallet}
+              setIsDeleteWallet={setIsDeleteWallet}
+            />
           ))}
         </tbody>
       </table>

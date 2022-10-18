@@ -3,12 +3,18 @@ import { MdDelete } from 'react-icons/md';
 
 interface WalletProps {
   wallet: IWallet;
+  isDeleteWallet: boolean;
+  setIsDeleteWallet: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Wallet = ({ wallet }: WalletProps) => {
-  const handleDelete = () => {
-    // confirm delete
-    // remove wallet
+export const Wallet = ({
+  wallet,
+  isDeleteWallet,
+  setIsDeleteWallet,
+}: WalletProps) => {
+  const handleDelete = async () => {
+    await window.api.deleteWallet(wallet.address);
+    setIsDeleteWallet(!isDeleteWallet);
   };
 
   return (
@@ -17,7 +23,7 @@ export const Wallet = ({ wallet }: WalletProps) => {
       <td className="py-2">{wallet.address}</td>
       <td>
         <div className="flex gap-2">
-          <MdDelete className="hover:cursor-pointer" />
+          <MdDelete onClick={handleDelete} className="hover:cursor-pointer" />
         </div>
       </td>
     </tr>

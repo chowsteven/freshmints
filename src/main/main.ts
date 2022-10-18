@@ -13,6 +13,7 @@ import { promises as fs } from 'fs';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { IWallet } from 'interfaces/IWallet';
 import { resolveHtmlPath } from './util';
 
 class AppUpdater {
@@ -161,9 +162,17 @@ app.on('ready', () => {
   );
 });
 
-// update tasks
+// TODO: make sure files exist before reading/writing
+
+// add task
+
+// update task
 
 // fetch tasks
+
+// delete task
+
+// clear tasks
 
 // add wallet
 ipcMain.handle(
@@ -190,9 +199,26 @@ ipcMain.handle(
   }
 );
 
-// update wallet
-
 // delete wallet
+ipcMain.handle('delete-wallet', async (event, wallet: string) => {
+  // get current wallets
+  const currentWalletsStr = await fs.readFile(
+    path.join(app.getPath('userData'), 'wallets.json'),
+    'utf-8'
+  );
+  const currentWallets = JSON.parse(currentWalletsStr);
+
+  // remove wallet from array
+  const filteredWallets = currentWallets.filter(
+    (inLoopWallet: IWallet) => inLoopWallet.address !== wallet
+  );
+
+  // re-write wallets.json
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'wallets.json'),
+    JSON.stringify(filteredWallets)
+  );
+});
 
 // fetch wallets
 ipcMain.handle('fetch-wallets', async () => {
