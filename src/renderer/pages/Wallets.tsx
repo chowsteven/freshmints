@@ -43,7 +43,7 @@ export const Wallets = () => {
         </thead>
         <tbody>
           {wallets.map((wallet) => (
-            <Wallet key={wallet.privateKey} wallet={wallet} />
+            <Wallet key={wallet.address} wallet={wallet} />
           ))}
         </tbody>
       </table>

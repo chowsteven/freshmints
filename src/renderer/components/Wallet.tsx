@@ -19,7 +19,7 @@ export const Wallet = ({ wallet }: WalletProps) => {
   return (
     <tr>
       <td className="py-2">{wallet.name}</td>
-      <td className="py-2">{wallet.privateKey}</td>
+      <td className="py-2">{wallet.address}</td>
       <td>
         <div className="flex gap-2">
           <MdModeEdit className="hover:cursor-pointer" />
