@@ -17,7 +17,7 @@ export const Wallets = () => {
     return walletsArr;
   }, []);
 
-  // fetch wallets on component mount
+  // fetch wallets on component mount and on wallet delete
   useEffect(() => {
     fetchWallets();
   }, [fetchWallets, isDeleteWallet]);
