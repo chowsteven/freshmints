@@ -1,4 +1,4 @@
-import { Fragment, useRef } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { IWallet } from '../../interfaces/IWallet';
 import { privateToAddress } from '../utils/privateToAddress';
@@ -17,26 +17,38 @@ export const AddWalletModal = ({
   fetchWallets,
 }: AddWalletModalProps) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const [error, setError] = useState('');
 
   const handleAdd = async (e: React.SyntheticEvent) => {
     e.preventDefault();
-    setIsModalOpen(false);
 
     if (formRef.current) {
-      // write to wallets.json
+      // get data
       const data = new FormData(formRef.current);
       const newWallet = Object.fromEntries(data.entries());
-      newWallet.address = privateToAddress(newWallet.privateKey as string);
 
-      // TODO: encrypt private key
+      // validate data
+      if (newWallet.privateKey.toString().length !== 64) {
+        setError('Private key must be 64 characters');
+      } else {
+        // data is good
+        // reset states
+        setIsModalOpen(false);
+        setError('');
 
-      // Warning: 'await' has no effect on the type of this expression.ts(80007)
-      // but need this add wallet to actually await before the fetching and updating state
-      await window.api.addWallet(newWallet);
+        // write to wallets.json
+        newWallet.address = privateToAddress(newWallet.privateKey as string);
 
-      // fetch wallets to update state
-      const updatedWallets = await fetchWallets();
-      setWallets(updatedWallets);
+        // TODO: encrypt private key
+
+        // Warning: 'await' has no effect on the type of this expression.ts(80007)
+        // but need this add wallet to actually await before the fetching and updating state
+        await window.api.addWallet(newWallet);
+
+        // fetch wallets to update state
+        const updatedWallets = await fetchWallets();
+        setWallets(updatedWallets);
+      }
     }
   };
 
@@ -80,6 +92,7 @@ export const AddWalletModal = ({
                     className="p-2 border rounded-md bg-gray-100"
                   />
                 </label>
+                {error && <div className="mt-2 text-red-500">{error}</div>}
               </div>
               <div className="flex gap-8">
                 <button
