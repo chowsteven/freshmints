@@ -9,6 +9,20 @@ export const Tasks = () => {
   const [isEditTask, setIsEditTask] = useState(false);
   const [isDeleteTask, setIsDeleteTask] = useState(false);
 
+  // // wrap around useCallback: https://devtrium.com/posts/async-functions-useeffect
+  // const fetchTasks = useCallback(async () => {
+  //   const tasksArrStr: string = await window.api.fetchTasks();
+  //   const tasksArr: ITask[] = JSON.parse(tasksArrStr);
+
+  //   setTasks(tasksArr);
+  //   return tasksArr;
+  // }, []);
+
+  // // fetch tasks on component mount
+  // useEffect(() => {
+  //   fetchTasks();
+  // }, [fetchTasks, isEditTask, isDeleteTask]);
+
   const startTasks = () => {
     //
   };
