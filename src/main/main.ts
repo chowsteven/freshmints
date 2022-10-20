@@ -193,12 +193,15 @@ ipcMain.handle(
     for (let i = 0; i < numWallets; i += 1) {
       const newTask: ITask = {
         privateKey: task[`wallets[${i}][privateKey]`].toString(),
+        walletAddress: task[`wallets[${i}][address]`].toString(),
         contract: task.contract.toString(),
         mintFunction: task.mintFunction.toString(),
+        mode: task.mode.toString() === 'Manual' ? 'Manual' : 'Automatic',
         mintPrice: task.mintPrice.toString(),
         quantity: Number(task.quantity),
         maxGas: Number(task.maxGas),
         priorityFee: Number(task.priorityFee),
+        status: 'Created',
       };
 
       newTasksArr.push(newTask);
@@ -222,9 +225,9 @@ ipcMain.handle(
 
 // update task
 
-// fetch tasks
-
 // delete task
+
+// fetch tasks
 
 // clear tasks
 
