@@ -1,6 +1,9 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { IWallet } from 'interfaces/IWallet';
 
-const addWallet = async (wallet: { [k: string]: FormDataEntryValue }) => {
+const addWallet = async (wallet: {
+  [k: string]: FormDataEntryValue;
+}): Promise<IWallet> => {
   const newWallet = ipcRenderer.invoke('add-wallet', wallet);
   return newWallet;
 };
@@ -18,7 +21,7 @@ const updateSettings = (settings: string) => {
   ipcRenderer.invoke('update-settings', settings);
 };
 
-const fetchSettings = async () => {
+const fetchSettings = async (): Promise<string> => {
   const settings = await ipcRenderer.invoke('fetch-settings');
   return settings;
 };
