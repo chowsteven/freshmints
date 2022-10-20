@@ -65,12 +65,15 @@ export const AddTaskModal = ({
                     className="p-2 border rounded-md bg-gray-100"
                   />
                 </label>
-                <label htmlFor="function" className="flex flex-col gap-1 mb-1">
+                <label
+                  htmlFor="mintFunction"
+                  className="flex flex-col gap-1 mb-1"
+                >
                   Mint Function
                   <input
                     type="text"
-                    name="function"
-                    id="function"
+                    name="mintFunction"
+                    id="mintFunction"
                     placeholder="Mint Function"
                     className="p-2 border rounded-md bg-gray-100"
                   />
@@ -82,12 +85,12 @@ export const AddTaskModal = ({
               </div>
               {/* TODO: automatic mode inputs */}
               <div className="flex gap-4 pb-4 mb-4 border-b border-b-gray-800">
-                <label htmlFor="price" className="flex flex-col gap-1">
+                <label htmlFor="mintPrice" className="flex flex-col gap-1">
                   Price
                   <input
                     type="text"
-                    name="price"
-                    id="price"
+                    name="mintPrice"
+                    id="mintPrice"
                     placeholder="Price"
                     className="w-28 p-2 border rounded-md bg-gray-100"
                   />
