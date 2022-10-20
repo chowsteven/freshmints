@@ -182,7 +182,7 @@ ipcMain.handle(
 
     // manual task will have 7 + 3 * numWallets keys
     if (task.mode === 'Manual') {
-      numWallets = (Object.keys(task).length - 7) / 3;
+      numWallets = (Object.keys(task).length - 8) / 3;
     } else {
       // automatic task TBD
       // temporary variable to satisfy numWallets not being assigned
@@ -192,6 +192,7 @@ ipcMain.handle(
     // create tasks for each wallet
     for (let i = 0; i < numWallets; i += 1) {
       const newTask: ITask = {
+        id: task.id.toString(),
         privateKey: task[`wallets[${i}][privateKey]`].toString(),
         walletAddress: task[`wallets[${i}][address]`].toString(),
         contract: task.contract.toString(),
@@ -223,7 +224,7 @@ ipcMain.handle(
   }
 );
 
-// update task
+// edit task
 
 // delete task
 

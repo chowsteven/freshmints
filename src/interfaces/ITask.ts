@@ -1,4 +1,5 @@
 export interface ITask {
+  id: string;
   privateKey: string;
   walletAddress: string;
   contract: string;
