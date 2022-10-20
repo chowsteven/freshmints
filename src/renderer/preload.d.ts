@@ -10,7 +10,7 @@ declare global {
         [k: string]: FormDataEntryValue;
       }) => Promise<IWallet>;
       deleteWallet: (wallet: string) => void;
-      fetchWallets: () => Promise<IWallet[]>;
+      fetchWallets: () => Promise<string>;
       updateSettings: (settings: string) => void;
       fetchSettings: () => Promise<string>;
     };
