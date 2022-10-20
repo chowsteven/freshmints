@@ -1,7 +1,5 @@
-import { IWallet } from './IWallet';
-
 export interface ITask {
-  wallet: IWallet;
+  privateKey: string;
   contract: string;
   mintFunction: string;
   mintPrice: string;
