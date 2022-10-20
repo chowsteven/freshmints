@@ -25,7 +25,7 @@ export const WalletSelect = ({
         <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg">
           {fetchedWallets.map((wallet) => (
             <Listbox.Option
-              key={wallet.name}
+              key={wallet.address}
               className={({ active, selected }) =>
                 `relative cursor-default select-none py-2 pl-2 pr-4 hover:bg-gray-300 ${
                   active ? 'bg-gray-300' : 'text-gray-900'
