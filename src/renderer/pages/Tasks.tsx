@@ -10,18 +10,18 @@ export const Tasks = () => {
   const [isDeleteTask, setIsDeleteTask] = useState(false);
 
   // // wrap around useCallback: https://devtrium.com/posts/async-functions-useeffect
-  // const fetchTasks = useCallback(async () => {
-  //   const tasksArrStr: string = await window.api.fetchTasks();
-  //   const tasksArr: ITask[] = JSON.parse(tasksArrStr);
+  const fetchTasks = useCallback(async () => {
+    const tasksArrStr: string = await window.api.fetchTasks();
+    const tasksArr: ITask[] = JSON.parse(tasksArrStr);
 
-  //   setTasks(tasksArr);
-  //   return tasksArr;
-  // }, []);
+    setTasks(tasksArr);
+    return tasksArr;
+  }, []);
 
-  // // fetch tasks on component mount
-  // useEffect(() => {
-  //   fetchTasks();
-  // }, [fetchTasks, isEditTask, isDeleteTask]);
+  // // fetch tasks on component mount, on task edit, and task delete
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks, isEditTask, isDeleteTask]);
 
   const startTasks = () => {
     //
@@ -61,11 +61,23 @@ export const Tasks = () => {
         </thead>
         <tbody>
           {tasks.map((task) => (
-            <Task />
+            <Task
+              key={task.walletAddress}
+              task={task}
+              isEditTask={isEditTask}
+              setIsEditTask={setIsEditTask}
+              isDeleteTask={isDeleteTask}
+              setIsDeleteTask={setIsDeleteTask}
+            />
           ))}
         </tbody>
       </table>
-      <AddTaskModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
+      <AddTaskModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        setTasks={setTasks}
+        fetchTasks={fetchTasks}
+      />
     </div>
   );
 };

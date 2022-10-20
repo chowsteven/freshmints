@@ -8,6 +8,8 @@ import { IWallet } from '../../interfaces/IWallet';
 interface AddTaskModalProps {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
+  fetchTasks: () => Promise<ITask[]>;
 }
 
 const tempWallets: IWallet[] = [
@@ -19,6 +21,8 @@ const tempWallets: IWallet[] = [
 export const AddTaskModal = ({
   isModalOpen,
   setIsModalOpen,
+  setTasks,
+  fetchTasks,
 }: AddTaskModalProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedWallets, setSelectedWallets] = useState<IWallet[]>([]);
@@ -41,8 +45,8 @@ export const AddTaskModal = ({
       await window.api.addTask(newTask);
 
       // fetch tasks to update state
-      // const updatedTasks = await fetchTasks();
-      // setTasks(updatedTasks);
+      const updatedTasks = await fetchTasks();
+      setTasks(updatedTasks);
     }
   };
 

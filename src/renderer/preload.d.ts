@@ -5,11 +5,12 @@ declare global {
   interface Window {
     api: {
       addTask: (task: { [k: string]: FormDataEntryValue }) => Promise<ITask>;
+      fetchTasks: () => Promise<string>;
       addWallet: (wallet: {
         [k: string]: FormDataEntryValue;
       }) => Promise<IWallet>;
       deleteWallet: (wallet: string) => void;
-      fetchWallets: () => Promise<string>;
+      fetchWallets: () => Promise<IWallet[]>;
       updateSettings: (settings: string) => void;
       fetchSettings: () => Promise<string>;
     };

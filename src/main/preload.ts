@@ -9,6 +9,11 @@ const addTask = async (task: {
   return newTask;
 };
 
+const fetchTasks = async (): Promise<string> => {
+  const tasks = await ipcRenderer.invoke('fetch-tasks');
+  return tasks;
+};
+
 const addWallet = async (wallet: {
   [k: string]: FormDataEntryValue;
 }): Promise<IWallet> => {
@@ -36,6 +41,7 @@ const fetchSettings = async (): Promise<string> => {
 
 const API = {
   addTask,
+  fetchTasks,
   addWallet,
   deleteWallet,
   fetchWallets,

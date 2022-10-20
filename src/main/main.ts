@@ -228,6 +228,14 @@ ipcMain.handle(
 // delete task
 
 // fetch tasks
+ipcMain.handle('fetch-tasks', async () => {
+  // read tasks.json
+  const tasks = await fs.readFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    'utf-8'
+  );
+  return tasks;
+});
 
 // clear tasks
 
