@@ -41,8 +41,6 @@ export const AddWalletModal = ({
 
         // TODO: encrypt private key
 
-        // Warning: 'await' has no effect on the type of this expression.ts(80007)
-        // but need this add wallet to actually await before the fetching and updating state
         await window.api.addWallet(newWallet);
 
         // fetch wallets to update state
