@@ -1,8 +1,9 @@
 import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { WalletSelect } from './WalletSelect';
-import { IWallet } from '../../interfaces/IWallet';
 import { TaskModeSelect } from './TaskModeSelect';
+import { ITask } from '../../interfaces/ITask';
+import { IWallet } from '../../interfaces/IWallet';
 
 interface AddTaskModalProps {
   isModalOpen: boolean;
@@ -25,6 +26,24 @@ export const AddTaskModal = ({
 
   const handleAdd = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+
+    if (formRef.current) {
+      // get data
+      const data = new FormData(formRef.current);
+      const newTask = Object.fromEntries(data.entries());
+
+      // TODO: validate data
+
+      // reset states
+      setIsModalOpen(false);
+
+      // write to tasks.json
+      await window.api.addTask(newTask);
+
+      // fetch tasks to update state
+      // const updatedTasks = await fetchTasks();
+      // setTasks(updatedTasks);
+    }
   };
 
   return (

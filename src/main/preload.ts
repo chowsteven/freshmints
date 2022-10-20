@@ -1,5 +1,13 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { ITask } from 'interfaces/ITask';
 import { IWallet } from 'interfaces/IWallet';
+
+const addTask = async (task: {
+  [k: string]: FormDataEntryValue;
+}): Promise<ITask> => {
+  const newTask = ipcRenderer.invoke('add-task', task);
+  return newTask;
+};
 
 const addWallet = async (wallet: {
   [k: string]: FormDataEntryValue;
@@ -12,7 +20,7 @@ const deleteWallet = (wallet: { [k: string]: FormDataEntryValue }) => {
   ipcRenderer.invoke('delete-wallet', wallet);
 };
 
-const fetchWallets = async () => {
+const fetchWallets = async (): Promise<string> => {
   const wallets = await ipcRenderer.invoke('fetch-wallets');
   return wallets;
 };
@@ -27,6 +35,7 @@ const fetchSettings = async (): Promise<string> => {
 };
 
 const API = {
+  addTask,
   addWallet,
   deleteWallet,
   fetchWallets,

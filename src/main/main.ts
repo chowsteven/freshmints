@@ -13,6 +13,7 @@ import { promises as fs } from 'fs';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { ITask } from 'interfaces/ITask';
 import { IWallet } from 'interfaces/IWallet';
 import { resolveHtmlPath } from './util';
 
@@ -143,7 +144,7 @@ app.on('ready', () => {
   // create tasks.json if it doesn't exist
   fs.writeFile(
     path.join(app.getPath('userData'), 'tasks.json'),
-    JSON.stringify({}),
+    JSON.stringify([]),
     { flag: 'wx' }
   );
 
@@ -165,6 +166,59 @@ app.on('ready', () => {
 // TODO: make sure files exist before reading/writing
 
 // add task
+ipcMain.handle(
+  'add-task',
+  async (
+    event,
+    task: {
+      [k: string]: FormDataEntryValue;
+    }
+  ) => {
+    // build new task array for concat later
+    const newTasksArr: ITask[] = [];
+
+    // get number of wallets
+    let numWallets: number;
+
+    // manual task will have 7 + 3 * numWallets keys
+    if (task.mode === 'Manual') {
+      numWallets = (Object.keys(task).length - 7) / 3;
+    } else {
+      // automatic task TBD
+      // temporary variable to satisfy numWallets not being assigned
+      numWallets = 1;
+    }
+
+    // create tasks for each wallet
+    for (let i = 0; i < numWallets; i += 1) {
+      const newTask: ITask = {
+        privateKey: task[`wallets[${i}][privateKey]`].toString(),
+        contract: task.contract.toString(),
+        mintFunction: task.mintFunction.toString(),
+        mintPrice: task.mintPrice.toString(),
+        quantity: Number(task.quantity),
+        maxGas: Number(task.maxGas),
+        priorityFee: Number(task.priorityFee),
+      };
+
+      newTasksArr.push(newTask);
+    }
+
+    // get current tasks
+    const currentTasksStr = await fs.readFile(
+      path.join(app.getPath('userData'), 'tasks.json'),
+      'utf-8'
+    );
+    const currentTasks = JSON.parse(currentTasksStr);
+
+    // push to tasks array
+    const combinedTasks = currentTasks.concat(newTasksArr);
+    fs.writeFile(
+      path.join(app.getPath('userData'), 'tasks.json'),
+      JSON.stringify(combinedTasks)
+    );
+  }
+);
 
 // update task
 
