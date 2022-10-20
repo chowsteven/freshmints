@@ -7,7 +7,7 @@ interface TaskModeSelectProps {
 
 export const TaskModeSelect = ({ mode, setMode }: TaskModeSelectProps) => {
   return (
-    <Listbox value={mode} onChange={setMode}>
+    <Listbox value={mode} onChange={setMode} name="mode">
       <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left">
         {mode}
       </Listbox.Button>

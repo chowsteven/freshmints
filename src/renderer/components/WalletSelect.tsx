@@ -13,7 +13,12 @@ export const WalletSelect = ({
   setSelectedWallets,
 }: WalletSelectProps) => {
   return (
-    <Listbox value={selectedWallets} onChange={setSelectedWallets} multiple>
+    <Listbox
+      value={selectedWallets}
+      onChange={setSelectedWallets}
+      name="wallets"
+      multiple
+    >
       <div className="relative mt-1">
         <Listbox.Button className="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left">
           <span className="block truncate">
