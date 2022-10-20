@@ -42,6 +42,7 @@ export const AddTaskModal = ({
 
       // reset states
       setIsModalOpen(false);
+      setSelectedWallets([]);
 
       // write to tasks.json
       await window.api.addTask(newTask);
