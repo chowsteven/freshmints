@@ -1,5 +1,5 @@
 import { ITask } from 'interfaces/ITask';
-import { MdEdit, MdDelete } from 'react-icons/md';
+import { MdPlayArrow, MdEdit, MdDelete } from 'react-icons/md';
 
 interface TaskProps {
   task: ITask;
@@ -16,7 +16,12 @@ export const Task = ({
   isDeleteTask,
   setIsDeleteTask,
 }: TaskProps) => {
+  const handleStart = () => {
+    //
+  };
+
   const handleEdit = () => {
+    // open edit task modal with prefilled info
     // await window.api.editTask(task);
     // setIsEditTask(!isEditTask);
   };
@@ -41,7 +46,12 @@ export const Task = ({
       <td className="py-2">{task.mode}</td>
       <td className="py-2">{task.status}</td>
       <td className="flex gap-2 pt-6">
-        <MdEdit onClick={handleEdit} className="hover:cursor-pointer" />{' '}
+        <MdPlayArrow
+          size={20}
+          onClick={handleStart}
+          className="hover:cursor-pointer"
+        />
+        <MdEdit onClick={handleEdit} className="hover:cursor-pointer" />
         <MdDelete
           onClick={() => handleDelete(task.id)}
           className="hover:cursor-pointer"
