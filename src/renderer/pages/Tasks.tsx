@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Task } from 'renderer/components/Task';
 import { AddTaskModal } from 'renderer/components/AddTaskModal';
+import { DeleteTasksModal } from 'renderer/components/DeleteTasksModal';
 import { ITask } from '../../interfaces/ITask';
 
 export const Tasks = () => {
   const [tasks, setTasks] = useState<ITask[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
+  const [isDeleteTasksModalOpen, setIsDeleteTasksModalOpen] = useState(false);
   const [isEditTask, setIsEditTask] = useState(false);
   const [isDeleteTask, setIsDeleteTask] = useState(false);
 
@@ -31,20 +33,27 @@ export const Tasks = () => {
     <div>
       <div className="flex justify-between">
         <div className="text-2xl mb-8">Tasks</div>
-        <div>
+        <div className="flex gap-4 mb-4">
           <button
             type="button"
-            onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 mr-4 mb-4 border rounded-md hover:bg-gray-600"
+            onClick={() => setIsAddTaskModalOpen(true)}
+            className="px-4 py-2 border rounded-md hover:bg-gray-600"
           >
             Add Task
           </button>
           <button
             type="button"
             onClick={startTasks}
-            className="px-4 py-2 mr-12 mb-4 border rounded-md hover:bg-green-800"
+            className="px-4 py-2 border rounded-md hover:bg-green-800"
           >
             Start All
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsDeleteTasksModalOpen(true)}
+            className="px-4 py-2 mr-12 border rounded-md hover:bg-red-800"
+          >
+            Delete All
           </button>
         </div>
       </div>
@@ -73,10 +82,15 @@ export const Tasks = () => {
         </tbody>
       </table>
       <AddTaskModal
-        isModalOpen={isModalOpen}
-        setIsModalOpen={setIsModalOpen}
+        isAddTaskModalOpen={isAddTaskModalOpen}
+        setIsAddTaskModalOpen={setIsAddTaskModalOpen}
         setTasks={setTasks}
         fetchTasks={fetchTasks}
+      />
+      <DeleteTasksModal
+        isDeleteTasksModalOpen={isDeleteTasksModalOpen}
+        setIsDeleteTasksModalOpen={setIsDeleteTasksModalOpen}
+        setTasks={setTasks}
       />
     </div>
   );

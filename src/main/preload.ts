@@ -9,6 +9,13 @@ const addTask = async (task: {
   return newTask;
 };
 
+// const editTask = async (task: {
+//   [k: string]: FormDataEntryValue;
+// }): Promise<ITask> => {
+//   const updatedTask = ipcRenderer.invoke('edit-task', task);
+//   return updatedTask;
+// };
+
 const deleteTask = async (taskId: string) => {
   ipcRenderer.invoke('delete-task', taskId);
 };
@@ -16,6 +23,10 @@ const deleteTask = async (taskId: string) => {
 const fetchTasks = async (): Promise<string> => {
   const tasks = await ipcRenderer.invoke('fetch-tasks');
   return tasks;
+};
+
+const deleteTasks = async () => {
+  ipcRenderer.invoke('delete-tasks');
 };
 
 const addWallet = async (wallet: {
@@ -45,8 +56,10 @@ const fetchSettings = async (): Promise<string> => {
 
 const API = {
   addTask,
+  // editTask,
   deleteTask,
   fetchTasks,
+  deleteTasks,
   addWallet,
   deleteWallet,
   fetchWallets,

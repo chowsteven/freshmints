@@ -225,7 +225,37 @@ ipcMain.handle(
   }
 );
 
-// edit task
+// // edit task
+// ipcMain.handle(
+//   'edit-task',
+//   async (
+//     event,
+//     task: {
+//       [k: string]: FormDataEntryValue;
+//     }
+//   ) => {
+//     // get current wallets
+//     const currentTasksStr = await fs.readFile(
+//       path.join(app.getPath('userData'), 'tasks.json'),
+//       'utf-8'
+//     );
+//     const currentTasks = JSON.parse(currentTasksStr);
+
+//     // get index of target task
+//     const targetIdx = currentTasks.findIndex(
+//       (inLoopTask: ITask) => inLoopTask.id === task.id
+//     );
+
+//     // update task in array
+//     currentTasks[targetIdx] = task;
+
+//     // re-write tasks.json
+//     fs.writeFile(
+//       path.join(app.getPath('userData'), 'tasks.json'),
+//       JSON.stringify(currentTasks)
+//     );
+//   }
+// );
 
 // delete task
 ipcMain.handle('delete-task', async (event, taskId: string) => {
@@ -258,7 +288,13 @@ ipcMain.handle('fetch-tasks', async () => {
   return tasks;
 });
 
-// clear tasks
+// delete tasks
+ipcMain.handle('delete-tasks', async () => {
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    JSON.stringify([])
+  );
+});
 
 // add wallet
 ipcMain.handle(
