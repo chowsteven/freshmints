@@ -9,6 +9,10 @@ const addTask = async (task: {
   return newTask;
 };
 
+const deleteTask = async (taskId: string) => {
+  ipcRenderer.invoke('delete-task', taskId);
+};
+
 const fetchTasks = async (): Promise<string> => {
   const tasks = await ipcRenderer.invoke('fetch-tasks');
   return tasks;
@@ -41,6 +45,7 @@ const fetchSettings = async (): Promise<string> => {
 
 const API = {
   addTask,
+  deleteTask,
   fetchTasks,
   addWallet,
   deleteWallet,

@@ -5,6 +5,7 @@ declare global {
   interface Window {
     api: {
       addTask: (task: { [k: string]: FormDataEntryValue }) => Promise<ITask>;
+      deleteTask: (taskId: string) => Promise<void>;
       fetchTasks: () => Promise<string>;
       addWallet: (wallet: {
         [k: string]: FormDataEntryValue;

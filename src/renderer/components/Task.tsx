@@ -21,9 +21,9 @@ export const Task = ({
     // setIsEditTask(!isEditTask);
   };
 
-  const handleDelete = () => {
-    // await window.api.deleteTask(task);
-    // setIsDeleteTask(!isDeleteTask);
+  const handleDelete = async (taskId: string) => {
+    await window.api.deleteTask(taskId);
+    setIsDeleteTask(!isDeleteTask);
   };
 
   return (
@@ -42,7 +42,10 @@ export const Task = ({
       <td className="py-2">{task.status}</td>
       <td className="flex gap-2 pt-6">
         <MdEdit onClick={handleEdit} className="hover:cursor-pointer" />{' '}
-        <MdDelete onClick={handleDelete} className="hover:cursor-pointer" />
+        <MdDelete
+          onClick={() => handleDelete(task.id)}
+          className="hover:cursor-pointer"
+        />
       </td>
     </tr>
   );

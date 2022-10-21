@@ -227,6 +227,25 @@ ipcMain.handle(
 // edit task
 
 // delete task
+ipcMain.handle('delete-task', async (event, taskId: string) => {
+  // get current wallets
+  const currentTasksStr = await fs.readFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    'utf-8'
+  );
+  const currentTasks = JSON.parse(currentTasksStr);
+
+  // remove task from array
+  const filteredTasks = currentTasks.filter(
+    (inLoopTask: ITask) => inLoopTask.id !== taskId
+  );
+
+  // re-write tasks.json
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    JSON.stringify(filteredTasks)
+  );
+});
 
 // fetch tasks
 ipcMain.handle('fetch-tasks', async () => {
