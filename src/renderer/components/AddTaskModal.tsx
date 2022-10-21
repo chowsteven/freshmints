@@ -6,8 +6,8 @@ import { ITask } from '../../interfaces/ITask';
 import { IWallet } from '../../interfaces/IWallet';
 
 interface AddTaskModalProps {
-  isModalOpen: boolean;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isAddTaskModalOpen: boolean;
+  setIsAddTaskModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
   fetchTasks: () => Promise<ITask[]>;
 }
@@ -19,8 +19,8 @@ const tempWallets: IWallet[] = [
 ];
 
 export const AddTaskModal = ({
-  isModalOpen,
-  setIsModalOpen,
+  isAddTaskModalOpen,
+  setIsAddTaskModalOpen,
   setTasks,
   fetchTasks,
 }: AddTaskModalProps) => {
@@ -39,7 +39,7 @@ export const AddTaskModal = ({
       // TODO: validate data
 
       // reset states
-      setIsModalOpen(false);
+      setIsAddTaskModalOpen(false);
       setSelectedWallets([]);
 
       // write to tasks.json
@@ -52,10 +52,10 @@ export const AddTaskModal = ({
   };
 
   return (
-    <Transition appear show={isModalOpen} as={Fragment}>
+    <Transition appear show={isAddTaskModalOpen} as={Fragment}>
       <Dialog
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        open={isAddTaskModalOpen}
+        onClose={() => setIsAddTaskModalOpen(false)}
         className="relative z-50"
       >
         {/* backdrop */}
@@ -160,7 +160,10 @@ export const AddTaskModal = ({
                 >
                   Create Task
                 </button>
-                <button type="button" onClick={() => setIsModalOpen(false)}>
+                <button
+                  type="button"
+                  onClick={() => setIsAddTaskModalOpen(false)}
+                >
                   Cancel
                 </button>
               </div>
