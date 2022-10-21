@@ -51,8 +51,13 @@ export const Task = ({
           onClick={handleStart}
           className="hover:cursor-pointer"
         />
-        <MdEdit onClick={handleEdit} className="hover:cursor-pointer" />
+        <MdEdit
+          size={16}
+          onClick={handleEdit}
+          className="hover:cursor-pointer"
+        />
         <MdDelete
+          size={16}
           onClick={() => handleDelete(task.id)}
           className="hover:cursor-pointer"
         />
