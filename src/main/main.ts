@@ -13,6 +13,7 @@ import { promises as fs } from 'fs';
 import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
+import { v4 as uuidv4 } from 'uuid';
 import { ITask } from 'interfaces/ITask';
 import { IWallet } from 'interfaces/IWallet';
 import { resolveHtmlPath } from './util';
@@ -192,7 +193,7 @@ ipcMain.handle(
     // create tasks for each wallet
     for (let i = 0; i < numWallets; i += 1) {
       const newTask: ITask = {
-        id: task.id.toString(),
+        id: uuidv4(),
         privateKey: task[`wallets[${i}][privateKey]`].toString(),
         walletAddress: task[`wallets[${i}][address]`].toString(),
         contract: task.contract.toString(),

@@ -1,6 +1,5 @@
 import { Fragment, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { v4 as uuidv4 } from 'uuid';
 import { WalletSelect } from './WalletSelect';
 import { TaskModeSelect } from './TaskModeSelect';
 import { ITask } from '../../interfaces/ITask';
@@ -35,7 +34,6 @@ export const AddTaskModal = ({
     if (formRef.current) {
       // get data
       const data = new FormData(formRef.current);
-      data.append('id', uuidv4());
       const newTask = Object.fromEntries(data.entries());
 
       // TODO: validate data
