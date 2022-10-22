@@ -3,16 +3,18 @@ import { MdPlayArrow, MdEdit, MdDelete } from 'react-icons/md';
 
 interface TaskProps {
   task: ITask;
-  isEditTask: boolean;
-  setIsEditTask: React.Dispatch<React.SetStateAction<boolean>>;
+  taskNumber: number;
+  setTaskNumber: React.Dispatch<React.SetStateAction<number>>;
+  setIsEditTaskModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isDeleteTask: boolean;
   setIsDeleteTask: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Task = ({
   task,
-  isEditTask,
-  setIsEditTask,
+  taskNumber,
+  setTaskNumber,
+  setIsEditTaskModalOpen,
   isDeleteTask,
   setIsDeleteTask,
 }: TaskProps) => {
@@ -21,9 +23,9 @@ export const Task = ({
   };
 
   const handleEdit = () => {
-    // open edit task modal with prefilled info
-    // await window.api.editTask(task);
-    // setIsEditTask(!isEditTask);
+    // set task number state so edit modal knows which task to bring up
+    setTaskNumber(taskNumber);
+    setIsEditTaskModalOpen(true);
   };
 
   const handleDelete = async (taskId: string) => {
@@ -35,7 +37,7 @@ export const Task = ({
     <tr>
       <td className="py-2">
         <div>{task.contract}</div>
-        <div className="text-sm text-gray-300">{task.walletAddress}</div>
+        <div className="text-sm text-gray-300">{task.wallet.address}</div>
       </td>
       <td className="py-2">
         {task.mintPrice} ({task.quantity})

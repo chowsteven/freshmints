@@ -8,12 +8,10 @@ const addTask = async (task: INewTask): Promise<ITask> => {
   return newTask;
 };
 
-// const editTask = async (task: {
-//   [k: string]: FormDataEntryValue;
-// }): Promise<ITask> => {
-//   const updatedTask = ipcRenderer.invoke('edit-task', task);
-//   return updatedTask;
-// };
+const editTask = async (task: ITask): Promise<ITask> => {
+  const updatedTask = ipcRenderer.invoke('edit-task', task);
+  return updatedTask;
+};
 
 const deleteTask = async (taskId: string) => {
   ipcRenderer.invoke('delete-task', taskId);
@@ -55,7 +53,7 @@ const fetchSettings = async (): Promise<string> => {
 
 const API = {
   addTask,
-  // editTask,
+  editTask,
   deleteTask,
   fetchTasks,
   deleteTasks,

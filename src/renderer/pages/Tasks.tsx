@@ -1,15 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Task } from 'renderer/components/Task';
 import { AddTaskModal } from 'renderer/components/AddTaskModal';
+import { EditTaskModal } from 'renderer/components/EditTaskModal';
 import { DeleteTasksModal } from 'renderer/components/DeleteTasksModal';
 import { ITask } from '../../interfaces/ITask';
 
 export const Tasks = () => {
   const [tasks, setTasks] = useState<ITask[]>([]);
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
+  const [isEditTaskModalOpen, setIsEditTaskModalOpen] = useState(false);
   const [isDeleteTasksModalOpen, setIsDeleteTasksModalOpen] = useState(false);
   const [isEditTask, setIsEditTask] = useState(false);
   const [isDeleteTask, setIsDeleteTask] = useState(false);
+  const [taskNumber, setTaskNumber] = useState(0); // for edit task modal to know which task to edit
 
   // // wrap around useCallback: https://devtrium.com/posts/async-functions-useeffect
   const fetchTasks = useCallback(async () => {
@@ -20,7 +23,7 @@ export const Tasks = () => {
     return tasksArr;
   }, []);
 
-  // // fetch tasks on component mount, on task edit, and task delete
+  // fetch tasks on component mount, on task edit, and task delete
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks, isEditTask, isDeleteTask]);
@@ -69,12 +72,13 @@ export const Tasks = () => {
           </tr>
         </thead>
         <tbody>
-          {tasks.map((task) => (
+          {tasks.map((task, i) => (
             <Task
-              key={task.walletAddress}
+              key={task.id}
               task={task}
-              isEditTask={isEditTask}
-              setIsEditTask={setIsEditTask}
+              taskNumber={i}
+              setTaskNumber={setTaskNumber}
+              setIsEditTaskModalOpen={setIsEditTaskModalOpen}
               isDeleteTask={isDeleteTask}
               setIsDeleteTask={setIsDeleteTask}
             />
@@ -85,6 +89,15 @@ export const Tasks = () => {
         isAddTaskModalOpen={isAddTaskModalOpen}
         setIsAddTaskModalOpen={setIsAddTaskModalOpen}
         setTasks={setTasks}
+        fetchTasks={fetchTasks}
+      />
+      <EditTaskModal
+        tasks={tasks}
+        taskNumber={taskNumber}
+        isEditTask={isEditTask}
+        setIsEditTask={setIsEditTask}
+        isEditTaskModalOpen={isEditTaskModalOpen}
+        setIsEditTaskModalOpen={setIsEditTaskModalOpen}
         fetchTasks={fetchTasks}
       />
       <DeleteTasksModal

@@ -204,37 +204,29 @@ ipcMain.handle('add-task', async (event, task: INewTask) => {
   );
 });
 
-// // edit task
-// ipcMain.handle(
-//   'edit-task',
-//   async (
-//     event,
-//     task: {
-//       [k: string]: FormDataEntryValue;
-//     }
-//   ) => {
-//     // get current wallets
-//     const currentTasksStr = await fs.readFile(
-//       path.join(app.getPath('userData'), 'tasks.json'),
-//       'utf-8'
-//     );
-//     const currentTasks = JSON.parse(currentTasksStr);
+// edit task
+ipcMain.handle('edit-task', async (event, task: ITask) => {
+  // get current wallets
+  const currentTasksStr = await fs.readFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    'utf-8'
+  );
+  const currentTasks = JSON.parse(currentTasksStr);
 
-//     // get index of target task
-//     const targetIdx = currentTasks.findIndex(
-//       (inLoopTask: ITask) => inLoopTask.id === task.id
-//     );
+  // get index of target task
+  const targetIdx = currentTasks.findIndex(
+    (inLoopTask: ITask) => inLoopTask.id === task.id
+  );
 
-//     // update task in array
-//     currentTasks[targetIdx] = task;
+  // update task in array
+  currentTasks[targetIdx] = task;
 
-//     // re-write tasks.json
-//     fs.writeFile(
-//       path.join(app.getPath('userData'), 'tasks.json'),
-//       JSON.stringify(currentTasks)
-//     );
-//   }
-// );
+  // re-write tasks.json
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    JSON.stringify(currentTasks)
+  );
+});
 
 // delete task
 ipcMain.handle('delete-task', async (event, taskId: string) => {
