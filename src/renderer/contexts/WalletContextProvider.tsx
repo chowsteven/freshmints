@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { IWallet } from 'interfaces/IWallet';
 import { IWalletContext } from 'interfaces/IWalletContext';
 import { WalletContext } from './WalletContext';
@@ -19,6 +19,11 @@ export const WalletContextProvider = ({
     setWallets(walletsArr);
     return walletsArr;
   }, []);
+
+  // fetch wallets on component mount and on wallet delete
+  useEffect(() => {
+    fetchWallets();
+  }, [fetchWallets, isDeleteWallet]);
 
   const value: IWalletContext = {
     wallets,

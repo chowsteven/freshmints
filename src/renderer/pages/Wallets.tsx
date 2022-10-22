@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { Wallet } from 'renderer/components/Wallet';
 import { AddWalletModal } from 'renderer/components/AddWalletModal';
 import { WalletContext } from 'renderer/contexts/WalletContext';
@@ -7,14 +7,7 @@ import { IWalletContext } from 'interfaces/IWalletContext';
 
 export const Wallets = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { wallets, isDeleteWallet, fetchWallets } = useContext(
-    WalletContext
-  ) as IWalletContext;
-
-  // fetch wallets on component mount and on wallet delete
-  useEffect(() => {
-    fetchWallets();
-  }, [fetchWallets, isDeleteWallet]);
+  const { wallets } = useContext(WalletContext) as IWalletContext;
 
   return (
     <div>
