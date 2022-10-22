@@ -1,7 +1,8 @@
-import { Fragment, useContext, useRef, useState } from 'react';
+import React, { Fragment, useContext, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { WalletContext } from 'renderer/contexts/WalletContext';
 import { IWalletContext } from 'interfaces/IWalletContext';
+import { INewTask } from 'interfaces/INewTask';
 import { WalletSelect } from './WalletSelect';
 import { TaskModeSelect } from './TaskModeSelect';
 import { ITask } from '../../interfaces/ITask';
@@ -14,6 +15,15 @@ interface AddTaskModalProps {
   fetchTasks: () => Promise<ITask[]>;
 }
 
+interface AddTaskFormProps {
+  contract: string;
+  mintFunction: string;
+  mintPrice: string;
+  quantity: string;
+  maxGas: string;
+  priorityFee: string;
+}
+
 export const AddTaskModal = ({
   isAddTaskModalOpen,
   setIsAddTaskModalOpen,
@@ -21,31 +31,48 @@ export const AddTaskModal = ({
   fetchTasks,
 }: AddTaskModalProps) => {
   const { wallets } = useContext(WalletContext) as IWalletContext;
-  const formRef = useRef<HTMLFormElement>(null);
+  const [addTaskForm, setAddTaskForm] = useState<AddTaskFormProps>({
+    contract: '',
+    mintFunction: '',
+    mintPrice: '',
+    quantity: '',
+    maxGas: '',
+    priorityFee: '',
+  });
+
   const [selectedWallets, setSelectedWallets] = useState<IWallet[]>([]);
   const [mode, setMode] = useState<'Manual' | 'Automatic'>('Manual');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAddTaskForm({ ...addTaskForm, [e.target.id]: e.target.value });
+  };
 
   const handleAdd = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
-    if (formRef.current) {
-      // get data
-      const data = new FormData(formRef.current);
-      const newTask = Object.fromEntries(data.entries());
+    const newTask: INewTask = { ...addTaskForm, selectedWallets, mode };
 
-      // TODO: validate data
+    // TODO: validate data
 
-      // reset states
-      setIsAddTaskModalOpen(false);
-      setSelectedWallets([]);
+    // reset states
+    setIsAddTaskModalOpen(false);
+    setAddTaskForm({
+      contract: '',
+      mintFunction: '',
+      mintPrice: '',
+      quantity: '',
+      maxGas: '',
+      priorityFee: '',
+    });
+    setSelectedWallets([]);
+    setMode('Manual');
 
-      // write to tasks.json
-      await window.api.addTask(newTask);
+    // write to tasks.json
+    await window.api.addTask(newTask);
 
-      // fetch tasks to update state
-      const updatedTasks = await fetchTasks();
-      setTasks(updatedTasks);
-    }
+    // fetch tasks to update state
+    const updatedTasks = await fetchTasks();
+    setTasks(updatedTasks);
   };
 
   return (
@@ -64,7 +91,7 @@ export const AddTaskModal = ({
             <Dialog.Title className="mb-4 text-xl font-semibold">
               Add Task
             </Dialog.Title>
-            <form ref={formRef}>
+            <form>
               <div className="pb-4 mb-4 border-b border-b-gray-800">
                 <div>
                   <p className="mb-1">Select Wallet(s)</p>
@@ -82,6 +109,8 @@ export const AddTaskModal = ({
                     type="text"
                     name="contract"
                     id="contract"
+                    value={addTaskForm.contract}
+                    onChange={handleChange}
                     placeholder="Contract Address"
                     className="p-2 border rounded-md bg-gray-100"
                   />
@@ -95,6 +124,8 @@ export const AddTaskModal = ({
                     type="text"
                     name="mintFunction"
                     id="mintFunction"
+                    value={addTaskForm.mintFunction}
+                    onChange={handleChange}
                     placeholder="Mint Function"
                     className="p-2 border rounded-md bg-gray-100"
                   />
@@ -112,6 +143,8 @@ export const AddTaskModal = ({
                     type="text"
                     name="mintPrice"
                     id="mintPrice"
+                    value={addTaskForm.mintPrice}
+                    onChange={handleChange}
                     placeholder="Price"
                     className="w-28 p-2 border rounded-md bg-gray-100"
                   />
@@ -122,6 +155,8 @@ export const AddTaskModal = ({
                     type="text"
                     name="quantity"
                     id="quantity"
+                    value={addTaskForm.quantity}
+                    onChange={handleChange}
                     placeholder="Quantity"
                     className="w-28 p-2 border rounded-md bg-gray-100"
                   />
@@ -134,6 +169,8 @@ export const AddTaskModal = ({
                     type="text"
                     name="maxGas"
                     id="maxGas"
+                    value={addTaskForm.maxGas}
+                    onChange={handleChange}
                     placeholder="Max Gas"
                     className="w-28 p-2 border rounded-md bg-gray-100"
                   />
@@ -144,6 +181,8 @@ export const AddTaskModal = ({
                     type="text"
                     name="priorityFee"
                     id="priorityFee"
+                    value={addTaskForm.priorityFee}
+                    onChange={handleChange}
                     placeholder="Priority Fee"
                     className="w-28 p-2 border rounded-md bg-gray-100"
                   />

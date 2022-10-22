@@ -14,6 +14,7 @@ import { app, BrowserWindow, shell, ipcMain } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import { v4 as uuidv4 } from 'uuid';
+import { INewTask } from 'interfaces/INewTask';
 import { ITask } from 'interfaces/ITask';
 import { IWallet } from 'interfaces/IWallet';
 import { resolveHtmlPath } from './util';
@@ -167,63 +168,42 @@ app.on('ready', () => {
 // TODO: make sure files exist before reading/writing
 
 // add task
-ipcMain.handle(
-  'add-task',
-  async (
-    event,
-    task: {
-      [k: string]: FormDataEntryValue;
-    }
-  ) => {
-    // build new task array for concat later
-    const newTasksArr: ITask[] = [];
+ipcMain.handle('add-task', async (event, task: INewTask) => {
+  // build new task array for concat later
+  const newTasksArr: ITask[] = [];
 
-    // get number of wallets
-    let numWallets: number;
+  for (let i = 0; i < task.selectedWallets.length; i += 1) {
+    const newTask: ITask = {
+      id: uuidv4(),
+      privateKey: task.selectedWallets[i].privateKey,
+      walletAddress: task.selectedWallets[i].address,
+      contract: task.contract,
+      mintFunction: task.mintFunction,
+      mode: task.mode === 'Manual' ? 'Manual' : 'Automatic',
+      mintPrice: task.mintPrice,
+      quantity: Number(task.quantity),
+      maxGas: Number(task.maxGas),
+      priorityFee: Number(task.priorityFee),
+      status: 'Created',
+    };
 
-    // manual task will have 7 + 3 * numWallets keys
-    if (task.mode === 'Manual') {
-      numWallets = (Object.keys(task).length - 8) / 3;
-    } else {
-      // automatic task TBD
-      // temporary variable to satisfy numWallets not being assigned
-      numWallets = 1;
-    }
-
-    // create tasks for each wallet
-    for (let i = 0; i < numWallets; i += 1) {
-      const newTask: ITask = {
-        id: uuidv4(),
-        privateKey: task[`wallets[${i}][privateKey]`].toString(),
-        walletAddress: task[`wallets[${i}][address]`].toString(),
-        contract: task.contract.toString(),
-        mintFunction: task.mintFunction.toString(),
-        mode: task.mode.toString() === 'Manual' ? 'Manual' : 'Automatic',
-        mintPrice: task.mintPrice.toString(),
-        quantity: Number(task.quantity),
-        maxGas: Number(task.maxGas),
-        priorityFee: Number(task.priorityFee),
-        status: 'Created',
-      };
-
-      newTasksArr.push(newTask);
-    }
-
-    // get current tasks
-    const currentTasksStr = await fs.readFile(
-      path.join(app.getPath('userData'), 'tasks.json'),
-      'utf-8'
-    );
-    const currentTasks = JSON.parse(currentTasksStr);
-
-    // push to tasks array
-    const combinedTasks = currentTasks.concat(newTasksArr);
-    fs.writeFile(
-      path.join(app.getPath('userData'), 'tasks.json'),
-      JSON.stringify(combinedTasks)
-    );
+    newTasksArr.push(newTask);
   }
-);
+
+  // get current tasks
+  const currentTasksStr = await fs.readFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    'utf-8'
+  );
+  const currentTasks = JSON.parse(currentTasksStr);
+
+  // push to tasks array
+  const combinedTasks = currentTasks.concat(newTasksArr);
+  fs.writeFile(
+    path.join(app.getPath('userData'), 'tasks.json'),
+    JSON.stringify(combinedTasks)
+  );
+});
 
 // // edit task
 // ipcMain.handle(

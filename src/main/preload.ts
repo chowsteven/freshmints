@@ -1,10 +1,9 @@
 import { contextBridge, ipcRenderer } from 'electron';
+import { INewTask } from 'interfaces/INewTask';
 import { ITask } from 'interfaces/ITask';
 import { IWallet } from 'interfaces/IWallet';
 
-const addTask = async (task: {
-  [k: string]: FormDataEntryValue;
-}): Promise<ITask> => {
+const addTask = async (task: INewTask): Promise<ITask> => {
   const newTask = ipcRenderer.invoke('add-task', task);
   return newTask;
 };

@@ -1,10 +1,11 @@
+import { INewTask } from 'interfaces/INewTask';
 import { ITask } from 'interfaces/ITask';
 import { IWallet } from 'interfaces/IWallet';
 
 declare global {
   interface Window {
     api: {
-      addTask: (task: { [k: string]: FormDataEntryValue }) => Promise<ITask>;
+      addTask: (task: INewTask) => Promise<ITask>;
       // editTask: (task: { [k: string]: FormDataEntryValue }) => Promise<ITask>;
       deleteTask: (taskId: string) => Promise<void>;
       fetchTasks: () => Promise<string>;
