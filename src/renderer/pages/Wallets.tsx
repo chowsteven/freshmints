@@ -1,21 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Wallet } from 'renderer/components/Wallet';
 import { AddWalletModal } from 'renderer/components/AddWalletModal';
+import { WalletContext } from 'renderer/contexts/WalletContext';
 import { IWallet } from 'interfaces/IWallet';
+import { IWalletContext } from 'interfaces/IWalletContext';
 
 export const Wallets = () => {
-  const [wallets, setWallets] = useState<IWallet[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDeleteWallet, setIsDeleteWallet] = useState(false);
-
-  // wrap around useCallback: https://devtrium.com/posts/async-functions-useeffect
-  const fetchWallets = useCallback(async () => {
-    const walletsArrStr: string = await window.api.fetchWallets();
-    const walletsArr: IWallet[] = JSON.parse(walletsArrStr);
-
-    setWallets(walletsArr);
-    return walletsArr;
-  }, []);
+  const { wallets, isDeleteWallet, fetchWallets } = useContext(
+    WalletContext
+  ) as IWalletContext;
 
   // fetch wallets on component mount and on wallet delete
   useEffect(() => {
@@ -43,21 +37,14 @@ export const Wallets = () => {
           </tr>
         </thead>
         <tbody>
-          {wallets.map((wallet) => (
-            <Wallet
-              key={wallet.address}
-              wallet={wallet}
-              isDeleteWallet={isDeleteWallet}
-              setIsDeleteWallet={setIsDeleteWallet}
-            />
+          {wallets.map((wallet: IWallet) => (
+            <Wallet key={wallet.address} wallet={wallet} />
           ))}
         </tbody>
       </table>
       <AddWalletModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        setWallets={setWallets}
-        fetchWallets={fetchWallets}
       />
     </div>
   );

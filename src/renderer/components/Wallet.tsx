@@ -1,17 +1,18 @@
 import { IWallet } from 'interfaces/IWallet';
+import { IWalletContext } from 'interfaces/IWalletContext';
+import { useContext } from 'react';
 import { MdDelete } from 'react-icons/md';
+import { WalletContext } from 'renderer/contexts/WalletContext';
 
 interface WalletProps {
   wallet: IWallet;
-  isDeleteWallet: boolean;
-  setIsDeleteWallet: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Wallet = ({
-  wallet,
-  isDeleteWallet,
-  setIsDeleteWallet,
-}: WalletProps) => {
+export const Wallet = ({ wallet }: WalletProps) => {
+  const { isDeleteWallet, setIsDeleteWallet } = useContext(
+    WalletContext
+  ) as IWalletContext;
+
   const handleDelete = async () => {
     await window.api.deleteWallet(wallet.address);
     setIsDeleteWallet(!isDeleteWallet);

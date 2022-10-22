@@ -1,21 +1,21 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useContext, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { IWallet } from '../../interfaces/IWallet';
+import { WalletContext } from 'renderer/contexts/WalletContext';
+import { IWalletContext } from 'interfaces/IWalletContext';
 import { privateToAddress } from '../utils/privateToAddress';
 
 interface AddWalletModalProps {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setWallets: React.Dispatch<React.SetStateAction<IWallet[]>>;
-  fetchWallets: () => Promise<IWallet[]>;
 }
 
 export const AddWalletModal = ({
   isModalOpen,
   setIsModalOpen,
-  setWallets,
-  fetchWallets,
 }: AddWalletModalProps) => {
+  const { setWallets, fetchWallets } = useContext(
+    WalletContext
+  ) as IWalletContext;
   const formRef = useRef<HTMLFormElement>(null);
   const [error, setError] = useState('');
 
