@@ -1,5 +1,7 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useContext, useRef, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { WalletContext } from 'renderer/contexts/WalletContext';
+import { IWalletContext } from 'interfaces/IWalletContext';
 import { WalletSelect } from './WalletSelect';
 import { TaskModeSelect } from './TaskModeSelect';
 import { ITask } from '../../interfaces/ITask';
@@ -12,18 +14,13 @@ interface AddTaskModalProps {
   fetchTasks: () => Promise<ITask[]>;
 }
 
-const tempWallets: IWallet[] = [
-  { name: 'a', privateKey: 'a', address: 'a' },
-  { name: '2', privateKey: '2', address: '2' },
-  { name: '3', privateKey: '3', address: '3' },
-];
-
 export const AddTaskModal = ({
   isAddTaskModalOpen,
   setIsAddTaskModalOpen,
   setTasks,
   fetchTasks,
 }: AddTaskModalProps) => {
+  const { wallets } = useContext(WalletContext) as IWalletContext;
   const formRef = useRef<HTMLFormElement>(null);
   const [selectedWallets, setSelectedWallets] = useState<IWallet[]>([]);
   const [mode, setMode] = useState<'Manual' | 'Automatic'>('Manual');
@@ -72,7 +69,7 @@ export const AddTaskModal = ({
                 <div>
                   <p className="mb-1">Select Wallet(s)</p>
                   <WalletSelect
-                    fetchedWallets={tempWallets}
+                    fetchedWallets={wallets}
                     selectedWallets={selectedWallets}
                     setSelectedWallets={setSelectedWallets}
                   />
