@@ -11,7 +11,6 @@ import { IWallet } from '../../interfaces/IWallet';
 interface AddTaskModalProps {
   isAddTaskModalOpen: boolean;
   setIsAddTaskModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setTasks: React.Dispatch<React.SetStateAction<ITask[]>>;
   fetchTasks: () => Promise<ITask[]>;
 }
 
@@ -27,7 +26,6 @@ interface AddTaskFormProps {
 export const AddTaskModal = ({
   isAddTaskModalOpen,
   setIsAddTaskModalOpen,
-  setTasks,
   fetchTasks,
 }: AddTaskModalProps) => {
   const { wallets } = useContext(WalletContext) as IWalletContext;
@@ -71,8 +69,7 @@ export const AddTaskModal = ({
     await window.api.addTask(newTask);
 
     // fetch tasks to update state
-    const updatedTasks = await fetchTasks();
-    setTasks(updatedTasks);
+    await fetchTasks();
   };
 
   return (

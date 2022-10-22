@@ -13,9 +13,7 @@ export const AddWalletModal = ({
   isModalOpen,
   setIsModalOpen,
 }: AddWalletModalProps) => {
-  const { setWallets, fetchWallets } = useContext(
-    WalletContext
-  ) as IWalletContext;
+  const { fetchWallets } = useContext(WalletContext) as IWalletContext;
   const formRef = useRef<HTMLFormElement>(null);
   const [error, setError] = useState('');
 
@@ -44,8 +42,7 @@ export const AddWalletModal = ({
         await window.api.addWallet(newWallet);
 
         // fetch wallets to update state
-        const updatedWallets = await fetchWallets();
-        setWallets(updatedWallets);
+        await fetchWallets();
       }
     }
   };

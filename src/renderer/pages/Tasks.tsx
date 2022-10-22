@@ -88,7 +88,6 @@ export const Tasks = () => {
       <AddTaskModal
         isAddTaskModalOpen={isAddTaskModalOpen}
         setIsAddTaskModalOpen={setIsAddTaskModalOpen}
-        setTasks={setTasks}
         fetchTasks={fetchTasks}
       />
       <EditTaskModal
