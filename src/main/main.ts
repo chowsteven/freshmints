@@ -178,7 +178,7 @@ ipcMain.handle('add-task', async (event, task: INewTask) => {
       wallet: task.selectedWallets[i],
       contract: task.contract,
       mintFunction: task.mintFunction,
-      mode: task.mode === 'Manual' ? 'Manual' : 'Automatic',
+      mode: task.mode,
       mintPrice: task.mintPrice,
       quantity: Number(task.quantity),
       maxGas: Number(task.maxGas),
