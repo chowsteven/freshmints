@@ -1,7 +1,8 @@
+import { IWallet } from './IWallet';
+
 export interface ITask {
   id: string;
-  privateKey: string;
-  walletAddress: string;
+  wallet: IWallet;
   contract: string;
   mintFunction: string;
   mode: 'Manual' | 'Automatic';

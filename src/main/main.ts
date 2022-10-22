@@ -175,8 +175,7 @@ ipcMain.handle('add-task', async (event, task: INewTask) => {
   for (let i = 0; i < task.selectedWallets.length; i += 1) {
     const newTask: ITask = {
       id: uuidv4(),
-      privateKey: task.selectedWallets[i].privateKey,
-      walletAddress: task.selectedWallets[i].address,
+      wallet: task.selectedWallets[i],
       contract: task.contract,
       mintFunction: task.mintFunction,
       mode: task.mode === 'Manual' ? 'Manual' : 'Automatic',
