@@ -1,5 +1,5 @@
 export interface ISettings {
-  rpc: string;
-  etherscan: string;
-  webhook: string;
+  alchemyApiKey: string;
+  etherscanApiKey: string;
+  discordWebhook: string;
 }
