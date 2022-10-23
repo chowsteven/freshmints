@@ -1,31 +1,19 @@
-import { ISettings } from 'interfaces/ISettings';
-import { useEffect, useRef, useState } from 'react';
+import { ISettingsContext } from 'interfaces/ISettingsContext';
+import { useContext, useRef, useState } from 'react';
+import { SettingsContext } from 'renderer/contexts/SettingsContext';
 
 export const Settings = () => {
+  const {
+    alchemyApiKey,
+    setAlchemyApiKey,
+    etherscanApiKey,
+    setEtherscanApiKey,
+    discordWebhook,
+    setDiscordWebhook,
+  } = useContext(SettingsContext) as ISettingsContext;
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [alchemyApiKey, setAlchemyApiKey] = useState('');
-  const [etherscanApiKey, setEtherscanApiKey] = useState('');
-  const [discordWebhook, setDiscordWebhook] = useState('');
   const [buttonText, setButtonText] = useState('Save');
-
-  // on component mount, fetch settings
-  useEffect(() => {
-    let settings: string;
-
-    // async function, so make separate function
-    const fetchSettings = async () => {
-      settings = await window.api.fetchSettings();
-      const settingsJSON: ISettings = JSON.parse(settings);
-
-      // set states
-      setAlchemyApiKey(settingsJSON.alchemyApiKey);
-      setEtherscanApiKey(settingsJSON.etherscanApiKey);
-      setDiscordWebhook(settingsJSON.discordWebhook);
-    };
-
-    fetchSettings();
-  }, []);
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
