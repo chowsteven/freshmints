@@ -1,5 +1,5 @@
 export interface ISettings {
-  alchemyApiKey: string;
+  alchemyApiUrl: string;
   etherscanApiKey: string;
   discordWebhook: string;
 }

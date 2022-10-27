@@ -8,7 +8,7 @@ export const SettingsContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [alchemyApiKey, setAlchemyApiKey] = useState('');
+  const [alchemyApiUrl, setAlchemyApiUrl] = useState('');
   const [etherscanApiKey, setEtherscanApiKey] = useState('');
   const [discordWebhook, setDiscordWebhook] = useState('');
 
@@ -17,7 +17,7 @@ export const SettingsContextProvider = ({
     const settingsStr = await window.api.fetchSettings();
     const settingsJSON: ISettings = JSON.parse(settingsStr);
 
-    setAlchemyApiKey(settingsJSON.alchemyApiKey);
+    setAlchemyApiUrl(settingsJSON.alchemyApiUrl);
     setEtherscanApiKey(settingsJSON.etherscanApiKey);
     setDiscordWebhook(settingsJSON.discordWebhook);
     return settingsJSON;
@@ -29,8 +29,8 @@ export const SettingsContextProvider = ({
   }, [fetchSettings]);
 
   const value: ISettingsContext = {
-    alchemyApiKey,
-    setAlchemyApiKey,
+    alchemyApiUrl,
+    setAlchemyApiUrl,
     etherscanApiKey,
     setEtherscanApiKey,
     discordWebhook,

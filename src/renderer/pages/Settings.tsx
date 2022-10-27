@@ -4,8 +4,8 @@ import { SettingsContext } from 'renderer/contexts/SettingsContext';
 
 export const Settings = () => {
   const {
-    alchemyApiKey,
-    setAlchemyApiKey,
+    alchemyApiUrl,
+    setAlchemyApiUrl,
     etherscanApiKey,
     setEtherscanApiKey,
     discordWebhook,
@@ -32,16 +32,16 @@ export const Settings = () => {
       <div className="text-2xl mb-8">Settings</div>
       <form ref={formRef}>
         <div className="mb-4">
-          <label htmlFor="alchemyApiKey" className="flex flex-col gap-1">
-            Alchemy API Key
+          <label htmlFor="alchemyApiUrl" className="flex flex-col gap-1">
+            Alchemy API URL
             <input
               type="text"
-              name="alchemyApiKey"
-              id="alchemyApiKey"
-              placeholder="Alchemy API Key"
-              value={alchemyApiKey}
+              name="alchemyApiUrl"
+              id="alchemyApiUrl"
+              placeholder="Alchemy API URL"
+              value={alchemyApiUrl}
               onChange={(e) => {
-                setAlchemyApiKey(e.target.value);
+                setAlchemyApiUrl(e.target.value);
                 setButtonText('Save');
               }}
               className="w-[512px] h-8 p-2 mr-2 rounded-md bg-gray-600 hover:bg-gray-500 focus:bg-gray-500"
