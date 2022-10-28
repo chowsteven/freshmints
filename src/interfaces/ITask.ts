@@ -5,9 +5,9 @@ export interface ITask {
   wallet: IWallet;
   contract: string;
   mintFunction: string;
+  mintParameters: string;
   mode: 'Manual' | 'Automatic';
   mintPrice: string;
-  quantity: number;
   maxGas: number;
   priorityFee: number;
   status: string;

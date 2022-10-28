@@ -17,8 +17,8 @@ interface AddTaskModalProps {
 interface AddTaskFormProps {
   contract: string;
   mintFunction: string;
+  mintParameters: string;
   mintPrice: string;
-  quantity: string;
   maxGas: string;
   priorityFee: string;
 }
@@ -32,8 +32,8 @@ export const AddTaskModal = ({
   const [addTaskForm, setAddTaskForm] = useState<AddTaskFormProps>({
     contract: '',
     mintFunction: '',
+    mintParameters: '',
     mintPrice: '',
-    quantity: '',
     maxGas: '',
     priorityFee: '',
   });
@@ -57,8 +57,8 @@ export const AddTaskModal = ({
     setAddTaskForm({
       contract: '',
       mintFunction: '',
+      mintParameters: '',
       mintPrice: '',
-      quantity: '',
       maxGas: '',
       priorityFee: '',
     });
@@ -127,13 +127,21 @@ export const AddTaskModal = ({
                     className="p-2 border rounded-md bg-gray-100"
                   />
                 </label>
-                <div>
-                  <p className="mb-1">Select Mode</p>
-                  <TaskModeSelect mode={mode} setMode={setMode} />
-                </div>
-              </div>
-              {/* TODO: automatic mode inputs */}
-              <div className="flex gap-4 pb-4 mb-4 border-b border-b-gray-800">
+                <label
+                  htmlFor="mintParameters"
+                  className="flex flex-col gap-1 mb-1"
+                >
+                  Mint Parameters (separated by ;)
+                  <input
+                    type="text"
+                    name="mintParameters"
+                    id="mintParameters"
+                    value={addTaskForm.mintParameters}
+                    onChange={handleChange}
+                    placeholder="Mint Function"
+                    className="p-2 border rounded-md bg-gray-100"
+                  />
+                </label>
                 <label htmlFor="mintPrice" className="flex flex-col gap-1">
                   Price
                   <input
@@ -143,21 +151,16 @@ export const AddTaskModal = ({
                     value={addTaskForm.mintPrice}
                     onChange={handleChange}
                     placeholder="Price"
-                    className="w-28 p-2 border rounded-md bg-gray-100"
+                    className="p-2 border rounded-md bg-gray-100"
                   />
                 </label>
-                <label htmlFor="quantity" className="flex flex-col gap-1">
-                  Quantity
-                  <input
-                    type="text"
-                    name="quantity"
-                    id="quantity"
-                    value={addTaskForm.quantity}
-                    onChange={handleChange}
-                    placeholder="Quantity"
-                    className="w-28 p-2 border rounded-md bg-gray-100"
-                  />
-                </label>
+              </div>
+              {/* TODO: automatic mode inputs */}
+              <div className="gap-4 pb-4 mb-4 border-b border-b-gray-800">
+                <div>
+                  <p className="mb-1">Select Mode</p>
+                  <TaskModeSelect mode={mode} setMode={setMode} />
+                </div>
               </div>
               <div className="flex gap-4 mb-8">
                 <label htmlFor="maxGas" className="flex flex-col gap-1">

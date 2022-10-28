@@ -5,8 +5,8 @@ export interface INewTask {
   mode: 'Manual' | 'Automatic';
   contract: string;
   mintFunction: string;
+  mintParameters: string;
   mintPrice: string;
-  quantity: string;
   maxGas: string;
   priorityFee: string;
 }

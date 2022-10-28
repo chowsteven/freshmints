@@ -20,8 +20,8 @@ interface EditTaskModalProps {
 interface EditTaskFormProps {
   contract: string;
   mintFunction: string;
+  mintParameters: string;
   mintPrice: string;
-  quantity: number;
   maxGas: number;
   priorityFee: number;
 }
@@ -45,8 +45,8 @@ export const EditTaskModal = ({
   const [editTaskForm, setEditTaskForm] = useState<EditTaskFormProps>({
     contract: task?.contract,
     mintFunction: task?.mintFunction,
+    mintParameters: task?.mintParameters,
     mintPrice: task?.mintPrice,
-    quantity: task?.quantity,
     maxGas: task?.maxGas,
     priorityFee: task?.priorityFee,
   });
@@ -60,8 +60,8 @@ export const EditTaskModal = ({
     setEditTaskForm({
       contract: task?.contract,
       mintFunction: task?.mintFunction,
+      mintParameters: task?.mintParameters,
       mintPrice: task?.mintPrice,
-      quantity: task?.quantity,
       maxGas: task?.maxGas,
       priorityFee: task?.priorityFee,
     });
@@ -78,7 +78,6 @@ export const EditTaskModal = ({
     e.preventDefault();
 
     // prepare for integration with ITask - change from string to number
-    editTaskForm.quantity = Number(editTaskForm.quantity);
     editTaskForm.maxGas = Number(editTaskForm.maxGas);
     editTaskForm.priorityFee = Number(editTaskForm.priorityFee);
 
@@ -97,8 +96,8 @@ export const EditTaskModal = ({
     setEditTaskForm({
       contract: updatedTask.contract,
       mintFunction: updatedTask.mintFunction,
+      mintParameters: updatedTask.mintParameters,
       mintPrice: updatedTask.mintPrice,
-      quantity: updatedTask.quantity,
       maxGas: updatedTask.maxGas,
       priorityFee: updatedTask.priorityFee,
     });
@@ -166,13 +165,21 @@ export const EditTaskModal = ({
                     className="p-2 border rounded-md bg-gray-100"
                   />
                 </label>
-                <div>
-                  <p className="mb-1">Select Mode</p>
-                  <TaskModeSelect mode={mode} setMode={setMode} />
-                </div>
-              </div>
-              {/* TODO: automatic mode inputs */}
-              <div className="flex gap-4 pb-4 mb-4 border-b border-b-gray-800">
+                <label
+                  htmlFor="mintParameters"
+                  className="flex flex-col gap-1 mb-1"
+                >
+                  Mint Parameters (separated by ;)
+                  <input
+                    type="text"
+                    name="mintParameters"
+                    id="mintParameters"
+                    value={editTaskForm.mintParameters}
+                    onChange={handleChange}
+                    placeholder="Mint Function"
+                    className="p-2 border rounded-md bg-gray-100"
+                  />
+                </label>
                 <label htmlFor="mintPrice" className="flex flex-col gap-1">
                   Price
                   <input
@@ -182,21 +189,16 @@ export const EditTaskModal = ({
                     value={editTaskForm.mintPrice}
                     onChange={handleChange}
                     placeholder="Price"
-                    className="w-28 p-2 border rounded-md bg-gray-100"
+                    className="p-2 border rounded-md bg-gray-100"
                   />
                 </label>
-                <label htmlFor="quantity" className="flex flex-col gap-1">
-                  Quantity
-                  <input
-                    type="text"
-                    name="quantity"
-                    id="quantity"
-                    value={editTaskForm.quantity}
-                    onChange={handleChange}
-                    placeholder="Quantity"
-                    className="w-28 p-2 border rounded-md bg-gray-100"
-                  />
-                </label>
+              </div>
+              {/* TODO: automatic mode inputs */}
+              <div className="gap-4 pb-4 mb-4 border-b border-b-gray-800">
+                <div>
+                  <p className="mb-1">Select Mode</p>
+                  <TaskModeSelect mode={mode} setMode={setMode} />
+                </div>
               </div>
               <div className="flex gap-4 mb-8">
                 <label htmlFor="maxGas" className="flex flex-col gap-1">
