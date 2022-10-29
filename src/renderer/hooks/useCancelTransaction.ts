@@ -7,11 +7,13 @@ import { SettingsContext } from 'renderer/contexts/SettingsContext';
 interface UseCancelTransactionProps {
   task: ITask;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
+  setIsTaskStarted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const useCancelTransaction = ({
   task,
   setStatus,
+  setIsTaskStarted,
 }: UseCancelTransactionProps) => {
   let provider: ethers.providers.JsonRpcProvider;
   let abiInterface: ethers.utils.Interface;
@@ -110,6 +112,7 @@ export const useCancelTransaction = ({
     try {
       const transactionReceipt = await transactionResponse.wait();
       setStatus(`Cancelled in block ${transactionReceipt.blockNumber}`);
+      setIsTaskStarted(false);
     } catch (err) {
       if (err instanceof Error) {
         console.log(err.message);

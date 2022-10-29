@@ -7,9 +7,14 @@ import { SettingsContext } from 'renderer/contexts/SettingsContext';
 interface UseStartTaskProps {
   task: ITask;
   setStatus: React.Dispatch<React.SetStateAction<string>>;
+  setIsTaskStarted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const useStartTask = ({ task, setStatus }: UseStartTaskProps) => {
+export const useStartTask = ({
+  task,
+  setStatus,
+  setIsTaskStarted,
+}: UseStartTaskProps) => {
   let provider: ethers.providers.JsonRpcProvider;
   let abiInterface: ethers.utils.Interface;
   let taskWallet: ethers.Wallet;
@@ -20,6 +25,7 @@ export const useStartTask = ({ task, setStatus }: UseStartTaskProps) => {
   ) as ISettingsContext;
 
   const initializeTask = async () => {
+    setIsTaskStarted(true);
     setStatus('Initializing');
     try {
       provider = new ethers.providers.JsonRpcProvider(alchemyApiUrl);
@@ -116,6 +122,7 @@ export const useStartTask = ({ task, setStatus }: UseStartTaskProps) => {
     try {
       const transactionReceipt = await transactionResponse.wait();
       setStatus(`Included in block ${transactionReceipt.blockNumber}`);
+      setIsTaskStarted(false);
     } catch (err) {
       if (err instanceof Error) {
         console.log(err.message);

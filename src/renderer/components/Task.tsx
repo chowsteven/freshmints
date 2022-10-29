@@ -22,10 +22,12 @@ export const Task = ({
   setIsDeleteTask,
 }: TaskProps) => {
   const [status, setStatus] = useState(task.status);
-  const { startTask } = useStartTask({ task, setStatus });
+  const [isTaskStarted, setIsTaskStarted] = useState(false);
+  const { startTask } = useStartTask({ task, setStatus, setIsTaskStarted });
   const { cancelTransaction } = useCancelTransaction({
     task,
     setStatus,
+    setIsTaskStarted,
   });
 
   const handleStart = async () => {
@@ -62,26 +64,22 @@ export const Task = ({
       <td className="py-2">{task.mode}</td>
       <td className="py-2">{status}</td>
       <td className="flex gap-2 pt-6">
-        <MdPlayArrow
-          size={22}
-          onClick={handleStart}
-          className="hover:cursor-pointer pb-1"
-        />
-        <MdStop
-          size={16}
-          onClick={handleStop}
-          className="hover:cursor-pointer"
-        />
-        <MdEdit
-          size={16}
-          onClick={handleEdit}
-          className="hover:cursor-pointer"
-        />
-        <MdDelete
-          size={16}
+        <button type="button" onClick={handleStart} disabled={isTaskStarted}>
+          <MdPlayArrow size={22} className="hover:cursor-pointer pb-1" />
+        </button>
+        <button type="button" onClick={handleStop} disabled={!isTaskStarted}>
+          <MdStop size={16} className="hover:cursor-pointer" />
+        </button>
+        <button type="button" onClick={handleEdit} disabled={isTaskStarted}>
+          <MdEdit size={16} className="hover:cursor-pointer" />
+        </button>
+        <button
+          type="button"
           onClick={() => handleDelete(task.id)}
-          className="hover:cursor-pointer"
-        />
+          disabled={isTaskStarted}
+        >
+          <MdDelete size={16} className="hover:cursor-pointer" />
+        </button>
       </td>
     </tr>
   );
