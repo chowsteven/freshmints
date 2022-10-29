@@ -1,5 +1,8 @@
+import { useState } from 'react';
 import { ITask } from 'interfaces/ITask';
-import { MdPlayArrow, MdEdit, MdDelete } from 'react-icons/md';
+import { MdPlayArrow, MdEdit, MdDelete, MdStop } from 'react-icons/md';
+import { useStartTask } from 'renderer/hooks/useStartTask';
+import { useCancelTransaction } from 'renderer/hooks/useCancelTransaction';
 
 interface TaskProps {
   task: ITask;
@@ -18,8 +21,19 @@ export const Task = ({
   isDeleteTask,
   setIsDeleteTask,
 }: TaskProps) => {
-  const handleStart = () => {
-    //
+  const [status, setStatus] = useState(task.status);
+  const { startTask } = useStartTask({ task, setStatus });
+  const { cancelTransaction } = useCancelTransaction({
+    task,
+    setStatus,
+  });
+
+  const handleStart = async () => {
+    await startTask();
+  };
+
+  const handleStop = async () => {
+    await cancelTransaction();
   };
 
   const handleEdit = () => {
@@ -40,17 +54,22 @@ export const Task = ({
         <div className="text-sm text-gray-300">{task.wallet.address}</div>
       </td>
       <td className="py-2">
-        {task.mintPrice} ({task.quantity})
+        {task.mintPrice} ({task.mintParameters})
       </td>
       <td className="py-2">
         {task.maxGas} + {task.priorityFee}
       </td>
       <td className="py-2">{task.mode}</td>
-      <td className="py-2">{task.status}</td>
+      <td className="py-2">{status}</td>
       <td className="flex gap-2 pt-6">
         <MdPlayArrow
-          size={20}
+          size={22}
           onClick={handleStart}
+          className="hover:cursor-pointer pb-1"
+        />
+        <MdStop
+          size={16}
+          onClick={handleStop}
           className="hover:cursor-pointer"
         />
         <MdEdit
