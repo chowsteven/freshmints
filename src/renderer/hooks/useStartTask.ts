@@ -112,7 +112,7 @@ export const useStartTask = ({
     setStatus('Sending tx');
     try {
       transactionResponse = await provider.sendTransaction(transaction);
-      setStatus('Sent tx');
+      setStatus(`Sent tx ${transactionResponse.hash}`);
     } catch (err) {
       setStatus(`Error sending tx: ${err}`);
     }

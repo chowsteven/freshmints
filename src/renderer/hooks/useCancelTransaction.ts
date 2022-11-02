@@ -102,7 +102,7 @@ export const useCancelTransaction = ({
   const sendTx = async () => {
     try {
       transactionResponse = await provider.sendTransaction(transaction);
-      setStatus('Sent cancellation tx');
+      setStatus(`Sent cancellation tx ${transactionResponse.hash}`);
     } catch (err) {
       setStatus(`Error sending tx: ${err}`);
     }
