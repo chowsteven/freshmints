@@ -113,10 +113,8 @@ export const useCancelTransaction = ({
       const transactionReceipt = await transactionResponse.wait();
       setStatus(`Cancelled in block ${transactionReceipt.blockNumber}`);
       setIsTaskStarted(false);
-    } catch (err) {
-      if (err instanceof Error) {
-        console.log(err.message);
-      }
+    } catch (err: any) {
+      setStatus(err);
     }
   };
 

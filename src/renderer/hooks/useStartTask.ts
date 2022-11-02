@@ -123,10 +123,8 @@ export const useStartTask = ({
       const transactionReceipt = await transactionResponse.wait();
       setStatus(`Included in block ${transactionReceipt.blockNumber}`);
       setIsTaskStarted(false);
-    } catch (err) {
-      if (err instanceof Error) {
-        console.log(err.message);
-      }
+    } catch (err: any) {
+      setStatus(err);
     }
   };
 
