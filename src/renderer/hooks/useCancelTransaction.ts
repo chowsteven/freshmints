@@ -24,12 +24,24 @@ export const useCancelTransaction = ({
     SettingsContext
   ) as ISettingsContext;
 
+  /* NOTE: window.api.editTask is used to persist task status state.
+   * To prevent excessive file read/writes, it is only called on errors or
+   * when task is past point of no return (sendTx and getTxResponse).
+   * Previous states/non-errors don't need to be persisted because the
+   * user can cancel task again and there will be no issues.
+   * Persisted error status will let user know not to restart the task,
+   * and when a tx is sent, the user will know not to re-send.
+   */
+
   const initializeTask = async () => {
     setStatus('Cancelling tx');
     try {
       provider = new ethers.providers.JsonRpcProvider(alchemyApiUrl);
     } catch (err) {
-      setStatus(`Initialization error: ${err}`);
+      const status = `Initialization error: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
@@ -44,7 +56,10 @@ export const useCancelTransaction = ({
       const abiJSON = await res.json();
       abiInterface = new ethers.utils.Interface(abiJSON.result);
     } catch (err) {
-      setStatus(`Error fetching ABI: ${err}`);
+      const status = `Error fetching ABI: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
@@ -52,7 +67,10 @@ export const useCancelTransaction = ({
     try {
       taskWallet = new ethers.Wallet(task.wallet.privateKey, provider);
     } catch (err) {
-      setStatus(`Error connecting to wallet: ${err}`);
+      const status = `Error connecting to wallet: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
@@ -95,26 +113,41 @@ export const useCancelTransaction = ({
 
       transaction = await taskWallet.signTransaction(txOptions);
     } catch (err) {
-      setStatus(`Error building tx: ${err}`);
+      const status = `Error building tx: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
   const sendTx = async () => {
     try {
       transactionResponse = await provider.sendTransaction(transaction);
-      setStatus(`Sent cancellation tx ${transactionResponse.hash}`);
+      const status = `Sent cancellation tx ${transactionResponse.hash}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     } catch (err) {
-      setStatus(`Error sending tx: ${err}`);
+      const status = `Error sending tx: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
   const getTxResponse = async () => {
     try {
       const transactionReceipt = await transactionResponse.wait();
-      setStatus(`Cancelled in block ${transactionReceipt.blockNumber}`);
       setIsTaskStarted(false);
+      const status = `Cancelled in block ${transactionReceipt.blockNumber}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     } catch (err) {
-      setStatus(`Error: ${err}`);
+      const status = `Error: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 

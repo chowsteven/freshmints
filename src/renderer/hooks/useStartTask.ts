@@ -25,14 +25,27 @@ export const useStartTask = ({
     SettingsContext
   ) as ISettingsContext;
 
+  /* NOTE: window.api.editTask is used to persist task status state.
+   * To prevent excessive file read/writes, it is only called on errors or
+   * when task is past point of no return (sendTx and getTxResponse).
+   * Previous states/non-errors don't need to be persisted because the
+   * user can start task again and there will be no issues.
+   * Persisted error status will let user know not to restart the task,
+   * and when a tx is sent, the user will know not to re-send.
+   */
+
   const initializeTask = async () => {
     setIsTaskStarted(true);
     setStatus('Initializing');
+
     try {
       provider = new ethers.providers.JsonRpcProvider(alchemyApiUrl);
       setStatus('Initialized task');
     } catch (err) {
-      setStatus(`Initialization error: ${err}`);
+      const status = `Initialization error: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
@@ -49,7 +62,10 @@ export const useStartTask = ({
       abiInterface = new ethers.utils.Interface(abiJSON.result);
       setStatus('Fetched ABI');
     } catch (err) {
-      setStatus(`Error fetching ABI: ${err}`);
+      const status = `Error fetching ABI: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
@@ -59,7 +75,10 @@ export const useStartTask = ({
       taskWallet = new ethers.Wallet(task.wallet.privateKey, provider);
       setStatus('Connected to wallet');
     } catch (err) {
-      setStatus(`Error connecting to wallet: ${err}`);
+      const status = `Error connecting to wallet: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
@@ -105,7 +124,10 @@ export const useStartTask = ({
       transaction = await taskWallet.signTransaction(txOptions);
       setStatus('Built new tx');
     } catch (err) {
-      setStatus(`Error building tx: ${err}`);
+      const status = `Error building tx: ${err}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     }
   };
 
@@ -113,12 +135,21 @@ export const useStartTask = ({
     setStatus('Sending tx');
     try {
       transactionResponse = await provider.sendTransaction(transaction);
-      setStatus(`Sent tx ${transactionResponse.hash}`);
+      const status = `Sent tx ${transactionResponse.hash}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
     } catch (err: any) {
       if (err.code === 'INSUFFICIENT_FUNDS') {
-        setStatus('Insufficient funds');
+        const status = 'Insufficient funds';
+        setStatus(status);
+        const updatedTask = { ...task, status };
+        window.api.editTask(updatedTask);
       } else {
-        setStatus(`Error sending tx: ${err}`);
+        const status = `Error sending tx: ${err}`;
+        setStatus(status);
+        const updatedTask = { ...task, status };
+        window.api.editTask(updatedTask);
       }
     }
   };
@@ -156,7 +187,10 @@ export const useStartTask = ({
 
     try {
       const transactionReceipt = await transactionResponse.wait();
-      setStatus(`Included in block ${transactionReceipt.blockNumber}`);
+      const status = `Included in block ${transactionReceipt.blockNumber}`;
+      setStatus(status);
+      const updatedTask = { ...task, status };
+      window.api.editTask(updatedTask);
       setIsTaskStarted(false);
       webhookJSON.embeds[0].title = 'Successful Transaction';
       webhookJSON.embeds[0].color = 6668912;
@@ -181,7 +215,10 @@ export const useStartTask = ({
           body: JSON.stringify(webhookJSON),
         });
       } else if (err.code === 'INSUFFICIENT_FUNDS') {
-        setStatus('Insufficient funds');
+        const status = 'Insufficient funds';
+        setStatus(status);
+        const updatedTask = { ...task, status };
+        window.api.editTask(updatedTask);
       }
     }
   };
