@@ -155,6 +155,7 @@ export const useStartTask = ({
   };
 
   const getTxResponse = async () => {
+    // initialize webhook
     const webhookJSON: IWebhook = {
       content: null,
       embeds: [
@@ -192,11 +193,14 @@ export const useStartTask = ({
       const updatedTask = { ...task, status };
       window.api.editTask(updatedTask);
       setIsTaskStarted(false);
+
+      // add to webhook
       webhookJSON.embeds[0].title = 'Successful Transaction';
       webhookJSON.embeds[0].color = 6668912;
       webhookJSON.embeds[0].fields[1].value = `[Etherscan](https://goerli.etherscan.io/tx/${transactionReceipt.transactionHash})`;
       webhookJSON.embeds[0].fields[3].value = `${task.mintPrice}E`;
 
+      // send webhook
       fetch(discordWebhook, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -204,11 +208,13 @@ export const useStartTask = ({
       });
     } catch (err: any) {
       if (err.cancelled) {
+        // add to webhook
         webhookJSON.embeds[0].title = 'Transaction Cancelled';
         webhookJSON.embeds[0].color = 12596790;
         webhookJSON.embeds[0].fields[1].value = `[Etherscan](https://goerli.etherscan.io/tx/${err.replacement.hash})`;
         webhookJSON.embeds[0].fields[3].value = '0E';
 
+        // send webhook
         fetch(discordWebhook, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
