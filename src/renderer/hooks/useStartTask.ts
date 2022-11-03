@@ -1,6 +1,7 @@
 import { ethers, utils } from 'ethers';
 import { ISettingsContext } from 'interfaces/ISettingsContext';
 import { ITask } from 'interfaces/ITask';
+import { IWebhook } from 'interfaces/IWebhook';
 import { useContext } from 'react';
 import { SettingsContext } from 'renderer/contexts/SettingsContext';
 
@@ -123,7 +124,7 @@ export const useStartTask = ({
   };
 
   const getTxResponse = async () => {
-    const webhookJSON: any = {
+    const webhookJSON: IWebhook = {
       content: null,
       embeds: [
         {
@@ -151,7 +152,6 @@ export const useStartTask = ({
       ],
       username: 'Freshmints',
       avatar_url: 'https://cdn-icons-png.flaticon.com/512/8154/8154047.png',
-      attachments: [],
     };
 
     try {
