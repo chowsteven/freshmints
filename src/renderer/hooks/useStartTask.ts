@@ -20,7 +20,7 @@ export const useStartTask = ({
   let taskWallet: ethers.Wallet;
   let transaction: string;
   let transactionResponse: ethers.providers.TransactionResponse;
-  const { alchemyApiUrl, etherscanApiKey } = useContext(
+  const { alchemyApiUrl, etherscanApiKey, discordWebhook } = useContext(
     SettingsContext
   ) as ISettingsContext;
 
@@ -119,12 +119,66 @@ export const useStartTask = ({
   };
 
   const getTxResponse = async () => {
+    const webhookJSON: any = {
+      content: null,
+      embeds: [
+        {
+          title: '',
+          color: 0,
+          fields: [
+            {
+              name: 'Contract Address',
+              value: `[Etherscan](https://goerli.etherscan.io/address/${task.contract})`,
+            },
+            {
+              name: 'Transaction Hash',
+              value: '',
+            },
+            {
+              name: 'Wallet Name',
+              value: `${task.wallet.name}`,
+            },
+            {
+              name: 'Price',
+              value: '',
+            },
+          ],
+        },
+      ],
+      username: 'Freshmints',
+      avatar_url: 'https://cdn-icons-png.flaticon.com/512/8154/8154047.png',
+      attachments: [],
+    };
+
     try {
       const transactionReceipt = await transactionResponse.wait();
       setStatus(`Included in block ${transactionReceipt.blockNumber}`);
       setIsTaskStarted(false);
+      webhookJSON.embeds[0].title = 'Successful Transaction';
+      webhookJSON.embeds[0].color = 6668912;
+      webhookJSON.embeds[0].fields[1].value = `[Etherscan](https://goerli.etherscan.io/tx/${transactionReceipt.transactionHash})`;
+      webhookJSON.embeds[0].fields[3].value = `${task.mintPrice}E`;
+
+      fetch(discordWebhook, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(webhookJSON),
+      });
     } catch (err: any) {
-      setStatus(err);
+      if (err.cancelled) {
+        webhookJSON.embeds[0].title = 'Transaction Cancelled';
+        webhookJSON.embeds[0].color = 12596790;
+        webhookJSON.embeds[0].fields[1].value = `[Etherscan](https://goerli.etherscan.io/tx/${err.replacement.hash})`;
+        webhookJSON.embeds[0].fields[3].value = '0E';
+
+        fetch(discordWebhook, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(webhookJSON),
+        });
+      } else if (err.code === 'INSUFFICIENT_FUNDS') {
+        setStatus('Insufficient funds');
+      }
     }
   };
 
