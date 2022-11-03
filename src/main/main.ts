@@ -183,7 +183,7 @@ ipcMain.handle('add-task', async (event, task: INewTask) => {
       mintPrice: task.mintPrice,
       maxGas: Number(task.maxGas),
       priorityFee: Number(task.priorityFee),
-      status: 'Created',
+      status: 'Idle',
     };
 
     newTasksArr.push(newTask);
