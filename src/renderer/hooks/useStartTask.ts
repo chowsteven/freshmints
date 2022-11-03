@@ -113,8 +113,12 @@ export const useStartTask = ({
     try {
       transactionResponse = await provider.sendTransaction(transaction);
       setStatus(`Sent tx ${transactionResponse.hash}`);
-    } catch (err) {
-      setStatus(`Error sending tx: ${err}`);
+    } catch (err: any) {
+      if (err.code === 'INSUFFICIENT_FUNDS') {
+        setStatus('Insufficient funds');
+      } else {
+        setStatus(`Error sending tx: ${err}`);
+      }
     }
   };
 
