@@ -64,11 +64,11 @@ export const Tasks = () => {
         <thead className="uppercase">
           <tr>
             <th className="w-3/12 py-3">Contract</th>
-            <th className="w-1/6 py-3">Price (Qty)</th>
+            <th className="w-1/12 py-3">Price (Qty)</th>
             <th className="w-1/12 py-3">Gas</th>
             <th className="w-1/12 py-3">Mode</th>
-            <th className="w-1/6 py-3">Status</th>
-            <th className="w-1/6 py-3">Actions</th>
+            <th className="w-5/12 py-3">Status</th>
+            <th className="w-1/12 py-3">Actions</th>
           </tr>
         </thead>
         <tbody>
