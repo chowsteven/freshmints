@@ -183,7 +183,7 @@ export const useStartTask = ({
         },
       ],
       username: 'Freshmints',
-      avatar_url: 'https://cdn-icons-png.flaticon.com/512/8154/8154047.png',
+      avatar_url: 'https://cdn-icons-png.flaticon.com/512/4087/4087025.png',
     };
 
     try {
