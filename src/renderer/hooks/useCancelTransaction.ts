@@ -102,14 +102,15 @@ export const useCancelTransaction = ({
         chainId: 5,
       };
 
-      // const estimatedGas = await provider.estimateGas({
-      //   to: task.contract,
-      //   data: encodedPayload,
-      //   value: utils.parseEther(task.mintPrice),
-      // });
+      const estimatedGas = await provider.estimateGas({
+        from: taskWallet.address,
+        to: task.contract,
+        data: encodedPayload,
+        value: utils.parseEther(task.mintPrice),
+      });
+
       // should multiply by 1.2 for safety + 1000
-      // txOptions.gasLimit = estimatedGas;
-      txOptions.gasLimit = 200000;
+      txOptions.gasLimit = estimatedGas;
 
       transaction = await taskWallet.signTransaction(txOptions);
     } catch (err) {

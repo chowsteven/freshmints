@@ -111,15 +111,15 @@ export const useStartTask = ({
         data: encodedPayload,
       };
 
-      // const estimatedGas = await provider.estimateGas({
-      //   to: task.contract,
-      //   data: encodedPayload,
-      //   value: txOptions.value,
-      // });
+      const estimatedGas = await provider.estimateGas({
+        from: taskWallet.address,
+        to: task.contract,
+        data: encodedPayload,
+        value: txOptions.value,
+      });
 
       // should multiply by 1.2 for safety
-      // txOptions.gasLimit = estimatedGas;
-      txOptions.gasLimit = 200000;
+      txOptions.gasLimit = estimatedGas;
 
       transaction = await taskWallet.signTransaction(txOptions);
       setStatus('Built new tx');
